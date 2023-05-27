@@ -10,6 +10,8 @@
   </head>
   <body>
     <?php
+      require_once './components/menu.php';
+
       if (isset($_SESSION['success'])) {
         echo <<< LOGOUT
         <form action="../scripts/logout.php" method="post">
