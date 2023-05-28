@@ -2,7 +2,7 @@
 
     class Order {
         public $id;
-        public $orderNumber;
+        public $number;
         public $status;
         public $user_id;
         public $products;

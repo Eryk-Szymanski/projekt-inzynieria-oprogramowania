@@ -27,8 +27,13 @@ LOGOUT;
           <h5><a href="./products.php">Wszystkie produkty</a></h5>
           <h3>twoje zamówienia</h3>
 USER;
-          while ($order = $result->fetch_assoc()) {
-            echo "<a href='./order-details.php?number=$order[number]'>$order[number]</a><br>";
+          $orders = $result->fetch_assoc();
+          if(!is_null($orders)) {
+            foreach ($orders as $order) {
+              echo "<a href='./order-details.php?number=$order[number]'>$order[number]</a><br>";
+            }
+          } else {
+            echo "<h3>Brak zamówień</h3>";
           }
         }
         elseif ($_SESSION['user_role'] == 'superuser') {

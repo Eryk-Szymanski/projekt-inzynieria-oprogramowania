@@ -34,9 +34,9 @@ INFO;
     <p>Zaloguj się</p>
     <form action="./scripts/login.php" method="post">
       <label for="email">Email<label>
-      <input type="email" id="email">
+      <input type="email" id="email" name="email">
       <label for="pass">Hasło<label>
-      <input type="password" id="pass">
+      <input type="password" id="pass" name="pass">
       <button type="submit">Zaloguj</button>
     </form>
 
