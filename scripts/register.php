@@ -22,8 +22,14 @@
     
     $pass = password_hash($_POST['pass1'], PASSWORD_ARGON2ID);  
     try {
-        $stmt = $mysqli->prepare("INSERT INTO users(city_id, name, surname, email, pass, birthday) VALUES (?, ?, ?, ?, ?, ?)");
-        $stmt->bind_param("isssss", $_POST['city_id'], $_POST['name'], $_POST['surname'], $_POST['email1'], $pass, $_POST['birthday']);
+        $stmt = $mysqli->prepare("INSERT INTO `addresses` (`zipcode`, `city`, `street`, `apartment`) VALUES (?, ?, ?, ?);");
+        $stmt->bind_param('ssss', $_POST['zipcode'], $_POST['city'], $_POST['street'], $_POST['apartment']);
+        $stmt->execute();
+
+        $address_id = $mysqli->insert_id;
+        
+        $stmt = $mysqli->prepare("INSERT INTO `users` (`name`, `surname`, `email`, `phone`, `pass`, `address_id`) VALUES (?, ?, ?, ?, ?, ?);");
+        $stmt->bind_param("sssssi", $_POST['name'], $_POST['surname'], $_POST['email1'], $_POST['phone'], $pass, $address_id);
         $stmt->execute();
 
         if ($stmt->affected_rows == 1) {

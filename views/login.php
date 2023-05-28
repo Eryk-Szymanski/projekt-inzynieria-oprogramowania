@@ -33,8 +33,10 @@ INFO;
     <a href="./">E-shop</a>
     <p>Zaloguj się</p>
     <form action="./scripts/login.php" method="post">
-      <input type="email">
-      <input type="password">
+      <label for="email">Email<label>
+      <input type="email" id="email" name="email">
+      <label for="pass">Hasło<label>
+      <input type="password" id="pass" name="pass">
       <button type="submit">Zaloguj</button>
     </form>
 
