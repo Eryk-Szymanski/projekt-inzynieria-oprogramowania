@@ -5,6 +5,7 @@
         public $city;
         public $street;
         public $apartment;
+        public $user_id;
     }
 
 ?>

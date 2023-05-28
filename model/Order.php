@@ -4,6 +4,7 @@
         public $id;
         public $orderNumber;
         public $status;
+        public $user_id;
         public $products;
         public $quantities;
         public $paymentMethod;
@@ -11,7 +12,6 @@
         public $deliveryAddress;
         public $totalPrice;
         public $comments;
-        public $client_id;
 
         public function changeStatus($status) {
             $this->status = $status;
