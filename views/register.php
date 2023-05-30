@@ -32,7 +32,7 @@
       <input type="text" id="street" name="street">
       <label for="apartment">Numer mieszkania/domu<label>
       <input type="text" id="apartment" name="apartment">
-
+        
       <input type="checkbox" id="agreeTerms" name="agreeTerms" value="agree">
       <label for="agreeTerms">
         Zatwierdzam <a href="#">regulamin</a>
