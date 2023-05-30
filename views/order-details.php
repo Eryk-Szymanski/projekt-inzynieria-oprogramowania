@@ -18,15 +18,12 @@
 LOGOUT;
         if (isset($_GET['number'])) {
           require_once '../scripts/connect.php';
-          $sql = "SELECT orders.*, cities.city FROM `orders` JOIN `cities` ON cities.id = orders.city_id WHERE `number` = $_GET[number]";
+          $sql = "SELECT * FROM `orders` WHERE `number` = $_GET[number]";
           $result = $mysqli->query($sql);
           $order = $result->fetch_assoc();
           echo <<< INFO
             <h3>Numer: $order[number]</h3><br>
-            <h5>Zamawiający: $order[name] $order[surname]</h5><br> 
-            <h5>Adres: $order[zipcode] $order[city]</h5><br>
-            <h5>$order[street] $order[building]</h5><br>
-            <h5>Wartość zamówienia: $order[final_price] zł</h5><br>
+            <h5>Wartość zamówienia: $order[total_price] zł</h5><br>
             <h5>Utworzono: $order[created_at]</h5><br>
             <table>
               <tr>

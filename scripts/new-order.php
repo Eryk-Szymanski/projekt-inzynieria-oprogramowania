@@ -33,13 +33,12 @@
         }
         $productsJSON = json_encode($products);
 
-        $stmt = $mysqli->prepare("INSERT INTO orders(number, user_id, products, final_price, comment, name, surname, zipcode, city_id, street, building) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
-        $stmt->bind_param("sisdssssiss", $orderNumber, $_SESSION['user_id'], $productsJSON, $_SESSION['cart_value'], $_POST['comment'], $_POST['name'], $_POST['surname'], $_POST['zipcode'], $_POST['city_id'], $_POST['street'], $_POST['building']);
+        $stmt = $mysqli->prepare("INSERT INTO `orders` (`number`, `user_id`, `products`, `payment_method_id`, `delivery_method_id`, `delivery_address_id`, `total_price`, `comments`) VALUES (?, ?, ?, ?, ?, ?, ?, ?);");
+        $stmt->bind_param("sisiiids", $orderNumber, $_POST['user_id'], $productsJSON, $_POST['paymentMethod'], $_POST['deliveryMethod'], $_POST['address_id'], $_SESSION['cart_value'], $_POST['comments']);
         $stmt->execute();
 
         if ($stmt->affected_rows == 1) {
-            echo "działa";
-            $_SESSION['success'] = "Prawidłowo utworzono zamówienie nr $testNumber";
+            $_SESSION['success'] = "Prawidłowo utworzono zamówienie nr $orderNumber";
         }
 
     } catch (Exception $e) {

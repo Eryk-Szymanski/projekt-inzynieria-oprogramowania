@@ -32,7 +32,7 @@
             header('location: ../views/logged.php');
             exit();
         } else {
-            $_SESSION['success'] = "Nie zalogowałeś się na użytkownika $_POST[email]";
+            $_SESSION['error'] = "Nie zalogowałeś się na użytkownika $_POST[email]";
         }
 
     } catch (Exception $e) {

@@ -6,7 +6,6 @@
         public $status;
         public $user_id;
         public $products;
-        public $quantities;
         public $paymentMethod;
         public $deliveryMethod;
         public $deliveryAddress;

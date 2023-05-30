@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 28, 2023 at 07:44 PM
+-- Generation Time: May 30, 2023 at 08:10 PM
 -- Server version: 10.4.17-MariaDB
 -- PHP Version: 8.0.0
 
@@ -81,7 +81,6 @@ CREATE TABLE `orders` (
   `status` int(2) NOT NULL DEFAULT 0,
   `user_id` int(10) UNSIGNED NOT NULL,
   `products` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL CHECK (json_valid(`products`)),
-  `quantities` longtext DEFAULT NULL,
   `payment_method_id` int(10) UNSIGNED NOT NULL,
   `delivery_method_id` int(10) UNSIGNED NOT NULL,
   `delivery_address_id` int(10) UNSIGNED NOT NULL,
@@ -89,6 +88,16 @@ CREATE TABLE `orders` (
   `comments` varchar(300) NOT NULL,
   `created_at` datetime NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `orders`
+--
+
+INSERT INTO `orders` (`id`, `number`, `status`, `user_id`, `products`, `payment_method_id`, `delivery_method_id`, `delivery_address_id`, `total_price`, `comments`, `created_at`) VALUES
+(8, '123', 0, 26, '{}', 1, 2, 11, 123, 'aaa', '2023-05-30 19:49:43'),
+(9, '1', 0, 26, '{}', 1, 2, 11, 123, 'aaa', '2023-05-30 19:59:11'),
+(10, '20230530200503', 0, 26, '[{\"product_id\":3,\"quantity\":\"1\"}]', 3, 4, 11, 2, 'vx', '2023-05-30 20:06:03'),
+(11, '20230530200543', 0, 26, '[{\"product_id\":3,\"quantity\":\"5\"}]', 1, 1, 11, 10, 'inpost karta prosze hehe', '2023-05-30 20:06:43');
 
 -- --------------------------------------------------------
 
@@ -98,7 +107,7 @@ CREATE TABLE `orders` (
 
 CREATE TABLE `payment_methods` (
   `id` int(10) UNSIGNED NOT NULL,
-  `name` enum('card','cash','online') COLLATE utf8mb4_polish_ci NOT NULL DEFAULT 'card'
+  `name` enum('Karta','Za pobraniem','Online') COLLATE utf8mb4_polish_ci NOT NULL DEFAULT 'Karta'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_polish_ci;
 
 --
@@ -106,9 +115,9 @@ CREATE TABLE `payment_methods` (
 --
 
 INSERT INTO `payment_methods` (`id`, `name`) VALUES
-(1, 'card'),
-(2, 'cash'),
-(3, 'online');
+(1, 'Karta'),
+(2, 'Za pobraniem'),
+(3, 'Online');
 
 -- --------------------------------------------------------
 
@@ -125,6 +134,13 @@ CREATE TABLE `products` (
   `calories` int(10) DEFAULT NULL,
   `price` float UNSIGNED NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `products`
+--
+
+INSERT INTO `products` (`id`, `name`, `weight`, `is_available`, `description`, `calories`, `price`) VALUES
+(3, 'Cukierek', 1, 1, 'Cukierek 1', 10, 2);
 
 -- --------------------------------------------------------
 
@@ -169,7 +185,7 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `name`, `surname`, `email`, `phone`, `pass`, `role_id`, `address_id`, `created_at`) VALUES
-(26, 'b', 'b', 'b@b.pl', 'b', '$argon2id$v=19$m=65536,t=4,p=1$WFBZZWlabDVhUzBjMVhMeA$kgPwcgJRzXD9GyJt83OTyL9ckSyyUvZ374SPv6lw+sE', 3, 11, '2023-05-28 19:35:29');
+(26, 'b', 'b', 'b@b.pl', 'b', '$argon2id$v=19$m=65536,t=4,p=1$WFBZZWlabDVhUzBjMVhMeA$kgPwcgJRzXD9GyJt83OTyL9ckSyyUvZ374SPv6lw+sE', 2, 11, '2023-05-28 19:35:29');
 
 --
 -- Indexes for dumped tables
@@ -244,7 +260,7 @@ ALTER TABLE `delivery_methods`
 -- AUTO_INCREMENT for table `orders`
 --
 ALTER TABLE `orders`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- AUTO_INCREMENT for table `payment_methods`
@@ -256,7 +272,7 @@ ALTER TABLE `payment_methods`
 -- AUTO_INCREMENT for table `products`
 --
 ALTER TABLE `products`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT for table `roles`

@@ -1,5 +1,6 @@
 <?php
   session_start();
+  require_once '../scripts/connect.php';
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -19,28 +20,58 @@ LOGOUT;
       ?>
 
       <form action="../scripts/new-order.php" method="post">
-        <input type="text" placeholder="Imię" name="name">
-        <input type="text" placeholder="Nazwisko" name="surname">
-        <input type="text" placeholder="Kod pocztowy" name="zipcode">
-        
         <?php
-          require_once '../scripts/connect.php';
-          $sql = "SELECT * FROM `cities`";
-          $result = $mysqli->query($sql);
-          $city = $result->fetch_assoc();
-        ?>
-
-        <select name="city_id" style="width: 100%;" data-select2-id="9" tabindex="-1" aria-hidden="true">
-          <?php
-            while ($city = $result->fetch_assoc()) {
-              echo "<option value=\"$city[id]\">$city[city]</option>";
-            }
-          ?>
-        </select>
         
-        <input type="text" placeholder="Ulica" name="street">
-        <input type="text" placeholder="Budynek/Mieszkanie" name="building">
-        <input type="text" placeholder="Dodaj komentarz" name="comment">
+// Informacje o kliencie
+          $sql = "SELECT id, name, surname, email, phone, address_id FROM `users` WHERE id = $_SESSION[user_id]";
+          $result = $mysqli->query($sql);
+          $user = $result->fetch_assoc();
+          echo <<< USER_DATA
+            <input type="number" value="$user[id]" name="user_id" hidden />
+            <input type="number" value="$user[address_id]" name="address_id" hidden />
+            <h5>Imię: $user[name]</h5>
+            <h5>Nazwisko: $user[surname]</h5>
+            <h5>Email: $user[email]</h5>
+            <h5>Telefon: $user[phone]</h5>
+USER_DATA;
+
+// Informacje o adresie dostawy
+          $sql = "SELECT zipcode, city, street, apartment FROM `addresses` WHERE id = $user[address_id]";
+          $result = $mysqli->query($sql);
+          $address = $result->fetch_assoc();
+          echo <<< USER_ADDRESS
+            <h5>Kod pocztowy: $address[zipcode]</h5>
+            <h5>Miasto: $address[city]</h5>
+            <h5>Ulica: $address[street]</h5>
+            <h5>Budynek/mieszkanie: $address[apartment]</h5>
+USER_ADDRESS;
+
+// Metoda płatności
+          $sql = "SELECT * FROM `payment_methods`";
+          $result = $mysqli->query($sql);
+          echo "<h5>Wybierz metodę płatności:</h5>";
+          while($payment_method = $result->fetch_assoc()) {
+            echo <<< PAYMENT_METHOD
+              <label>
+                <input type="radio" name="paymentMethod" value="$payment_method[id]"> $payment_method[name] 
+              </label>
+PAYMENT_METHOD;
+          }
+
+// Sposób dostawy  
+          $sql = "SELECT * FROM `delivery_methods`";
+          $result = $mysqli->query($sql);
+          echo "<h5>Wybierz sposób dostawy:</h5>";
+          while($delivery_method = $result->fetch_assoc()) {
+            echo <<< DELIVERY_METHOD
+              <label>
+                <input type="radio" name="deliveryMethod" value="$delivery_method[id]"> $delivery_method[name] 
+              </label>
+DELIVERY_METHOD;
+          }
+        ?>
+        
+        <input type="text" placeholder="Dodaj komentarz" name="comments">
 
         <input type="checkbox" id="agreeTerms" name="agreeTerms" value="agree">
         <label for="agreeTerms">
@@ -60,7 +91,6 @@ LOGOUT;
 
         <?php
           if(isset($_SESSION['cart'])) {
-            require_once '../scripts/connect.php';
             $cart_value = 0;
             foreach($_SESSION['cart'] as $key => $value) {
               $sql = "SELECT name, price FROM `products` WHERE id = $key";

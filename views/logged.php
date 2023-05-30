@@ -36,13 +36,13 @@ USER;
             echo "<h3>Brak zamówień</h3>";
           }
         }
-        elseif ($_SESSION['user_role'] == 'superuser') {
+        elseif ($_SESSION['user_role'] == 'employee') {
           $sql = "SELECT orders.number FROM `orders` WHERE `status` = 0";
           $result = $mysqli->query($sql);
-          echo <<< SUPERUSER
+          echo <<< EMPLOYEE
           <h5><a href="./products.php">Wszystkie produkty</a></h5>
           <h3>Nowe zamówienia -> Do zaakceptowania</h3>
-SUPERUSER;
+EMPLOYEE;
 
           while ($order = $result->fetch_assoc()) {
             echo "<a href='./order-details.php?number=$order[number]'>$order[number]</a><br>";

@@ -16,6 +16,9 @@
               <button type="submit">Wyloguj</button>
           </form>
 LOGOUT;
+
+        if ($_SESSION['user_role'] == 'employee')
+          echo "<a href='./add-product.php'>Dodaj produkt</a>";
       ?>
 
       <button><a href="./new-order.php">Zamów</a></button>
@@ -27,15 +30,17 @@ LOGOUT;
         $sql = "SELECT * FROM `products`";
         $result = $mysqli->query($sql);
         while($product = $result->fetch_assoc()) {
-          echo <<< INFO
-          <h3>$product[name]</h3>
-          <p>$product[price] zł</p>
-          <form action="../scripts/add-product.php" method="post">
-            <input type="number" value="$product[id]" hidden="true" name="product_id" />
-            <input type="number" value="1" name="quantity"/>
-            <button type="submit">Dodaj do koszyka</button>
-          </form>
+          if($product['is_available']) {
+            echo <<< INFO
+            <h3>$product[name]</h3>
+            <p>$product[price] zł</p>
+            <form action="../scripts/add-to-cart.php" method="post">
+              <input type="number" value="$product[id]" hidden="true" name="product_id" />
+              <input type="number" value="1" name="quantity"/>
+              <button type="submit">Dodaj do koszyka</button>
+            </form>
 INFO;
+          }
         }
       ?>
     <?php endif ?>
