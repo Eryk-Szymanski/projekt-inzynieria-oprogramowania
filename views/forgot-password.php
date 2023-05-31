@@ -3,18 +3,28 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>E-shop | Zapomnianie hasło</title>
+    <title>Candy Shop | Zapomnianie hasło</title>
+    <?php
+      require_once '../style/links.php';
+    ?>
   </head>
   <body>
-    <div>
-      <p>Zapomniane hasło? Tutaj możesz łatwo otrzymać nowe hasło.</p>
-      <form action="recover-password.html" method="post">
-        <input type="email">
-        <button type="submit">Stwórz nowe hasło</button>
-      </form>
-      <p>
-        <a href="../">Login</a>
-      </p>
+    <div class="container-fluid w-100 bg-dark screen-height d-flex justify-content-center align-items-center">
+      <div class="bg-warning bg-gradient rounded d-flex flex-column justify-content-center align-items-center w-25">
+        
+        <img src="../images/logo.png" class="w-50"/>
+        <h1><a href="./" class="text-decoration-none fw-bolder">Candy Shop</a></h1>
+        <h3 class="px-4">Zapomniane hasło? Tutaj możesz łatwo otrzymać nowe hasło.</h3>
+        
+        <form action="recover-password.html" method="post" class="d-flex flex-column">
+          <label for="email">Email</label>
+          <input type="email" class="form-control" id="email" name="email">
+          <button type="submit" class="btn btn-primary m-4">Stwórz nowe hasło</button>
+        </form>
+        
+        <a href="../" class="m-2 text-reset fs-5">Logowanie</a>
+      
+      </div>
     </div>
   </body>
 </html>

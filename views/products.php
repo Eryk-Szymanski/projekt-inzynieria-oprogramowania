@@ -6,43 +6,55 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>E-shop | Produkty</title>
+    <title>Candy Shop | Produkty</title>
+    <?php
+      require_once '../style/links.php';
+    ?>
   </head>
   <body>
-    <?php if (isset($_SESSION['success'])) : ?>
-      <?php
-        echo <<< LOGOUT
-          <form action="../scripts/logout.php" method="post">
-              <button type="submit">Wyloguj</button>
-          </form>
-LOGOUT;
+    <div class="container-fluid w-100 bg-dark screen-height d-flex justify-content-center align-items-center text-light">
+      <div class="d-flex flex-column">
+        <?php if (isset($_SESSION['success'])) : ?>
+          <?php
 
-        if ($_SESSION['user_role'] == 'employee')
-          echo "<a href='./add-product.php'>Dodaj produkt</a>";
-      ?>
+            require_once './components/menu.php';
 
-      <button><a href="./new-order.php">Zamów</a></button>
-      <?php
-        if(isset($_SESSION['cart'])) {
-          echo count($_SESSION['cart']);
-        }
-        require_once '../scripts/connect.php';
-        $sql = "SELECT * FROM `products`";
-        $result = $mysqli->query($sql);
-        while($product = $result->fetch_assoc()) {
-          if($product['is_available']) {
-            echo <<< INFO
-            <h3>$product[name]</h3>
-            <p>$product[price] zł</p>
-            <form action="../scripts/add-to-cart.php" method="post">
-              <input type="number" value="$product[id]" hidden="true" name="product_id" />
-              <input type="number" value="1" name="quantity"/>
-              <button type="submit">Dodaj do koszyka</button>
-            </form>
+            if ($_SESSION['user_role'] == 'employee')
+              echo "<a href='./add-product.php' class='btn btn-primary m-4'>Dodaj produkt</a>";
+          ?>
+
+          
+          <?php
+            require_once '../scripts/connect.php';
+            $sql = "SELECT * FROM `products`";
+            $result = $mysqli->query($sql);
+            echo "<table>";
+            while($product = $result->fetch_assoc()) {
+              if($product['is_available']) {
+                echo <<< INFO
+                <tr>
+                  <td>
+                    <h3>$product[name]</h3>
+                  </td>
+                  <td>$product[price] zł</td>
+                  <form action="../scripts/add-to-cart.php" method="post">
+                    <td class="d-flex flex-row">    
+                      <input type="number" value="$product[id]" hidden="true" name="product_id" />
+                      <label for="quantity">Ilość</label>
+                      <input type="number" class="form-control" value="1" name="quantity"/>
+                    </td>
+                    <td>
+                      <button type="submit" class="btn btn-primary m-4">Dodaj do koszyka</button>
+                    </td>
+                  </form>
+                </tr>
 INFO;
-          }
-        }
-      ?>
-    <?php endif ?>
+              }
+            }
+            echo "</table>";
+          ?>
+        <?php endif ?>
+      </div>
+    </div>
   </body>
 </html>
