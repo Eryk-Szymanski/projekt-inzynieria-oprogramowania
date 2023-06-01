@@ -26,17 +26,27 @@
               $order = $result->fetch_assoc();
 
               echo <<< INFO
-                <h3>Numer: $order[number]</h3><br>
-                <h5>Imię: $order[name]</h5>
-                <h5>Nazwisko: $order[surname]</h5>
-                <h5>Email: $order[email]</h5>
-                <h5>Telefon: $order[phone]</h5>
-                <h5>Kod pocztowy: $order[zipcode]</h5>
-                <h5>Miasto: $order[city]</h5>
-                <h5>Ulica: $order[street]</h5>
-                <h5>Budynek/mieszkanie: $order[apartment]</h5>
-                <h5>Wartość zamówienia: $order[total_price] zł</h5><br>
-                <h5>Utworzono: $order[created_at]</h5><br>
+                <h3 class="p-4 bg-primary bg-gradient rounded">Numer: $order[number]</h3><br>
+                <div class="d-flex flex-column flex-lg-row">
+                  <div class="col-6 p-4">
+                    <h3>Dane</h3>
+                    <h5>Imię: $order[name]</h5>
+                    <h5>Nazwisko: $order[surname]</h5>
+                    <h5>Email: $order[email]</h5>
+                    <h5>Telefon: $order[phone]</h5>
+                  </div>
+                  <div class="col-6 p-4">
+                    <h3>Adres</h3>
+                    <h5>Kod pocztowy: $order[zipcode]</h5>
+                    <h5>Miasto: $order[city]</h5>
+                    <h5>Ulica: $order[street]</h5>
+                    <h5>Budynek/mieszkanie: $order[apartment]</h5>
+                  </div>
+                </div>
+                <div class="d-flex flex-column flex-lg-row">
+                  <h5>Wartość zamówienia: $order[total_price] zł</h5><br>
+                  <h5>Utworzono: $order[created_at]</h5><br>
+                </div>
 INFO;
               $products = json_decode($order['products'], false);
               foreach ($products as $product) {
@@ -56,20 +66,20 @@ INFO;
             }
             if (isset($_SESSION['user_role'])) {
               if($_SESSION['user_role'] == 'employee' && $order['status'] == 0) {
-                echo <<< ACCEPT
-                <form action="../scripts/accept-order.php" method="post">
-                  <input type="text" value="accept" hidden="true" name="decision" />
-                  <input type="text" value="$_GET[number]" hidden="true" name="number" />
-                  <button type="submit" class="btn btn-primary m-4">Zaakceptuj</button>
-                </form>
-ACCEPT;
-                echo <<< REJECT
-                <form action="../scripts/accept-order.php" method="post">
-                  <input type="text" value="reject" hidden="true" name="decision" />
-                  <input type="text" value="$_GET[number]" hidden="true" name="number" />
-                  <button type="submit" class="btn btn-primary m-4">Odrzuć</button>
-                </form>
-REJECT;
+                echo <<< OPTIONS
+                <div class="d-flex flex-column flex-lg-row">
+                  <form action="../scripts/accept-order.php" method="post">
+                    <input type="text" value="accept" hidden="true" name="decision" />
+                    <input type="text" value="$_GET[number]" hidden="true" name="number" />
+                    <button type="submit" class="btn btn-primary m-4">Zaakceptuj</button>
+                  </form>
+                  <form action="../scripts/accept-order.php" method="post">
+                    <input type="text" value="reject" hidden="true" name="decision" />
+                    <input type="text" value="$_GET[number]" hidden="true" name="number" />
+                    <button type="submit" class="btn btn-primary m-4">Odrzuć</button>
+                  </form>
+                </div>
+OPTIONS;
               }
             }
           ?>

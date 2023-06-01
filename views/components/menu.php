@@ -1,13 +1,17 @@
-<div class="fixed-top bg-warning d-flex align-items-center">
+<div class="container-fluid fixed-top bg-warning d-flex align-items-center">
     
     <a href="./logged.php" class="d-flex align-items-center text-decoration-none fw-bolder">
         <img src="../images/logo.png" class="image-small"/>
         <h1>Candy Shop</h1>
     </a>
 
-    <a href="./products.php" class="btn btn-primary m-4">Produkty</a>
+    <a href="./logged.php" class="btn btn-primary m-4">Zamówienia</a>
+    <a href="./products.php" class="btn btn-primary m-1">Produkty</a>
 
-    <div class="container">
+    <?php if ($_SESSION['user_role'] == 'employee')
+        echo "<a href='./add-product.php' class='btn btn-primary m-4'>Dodaj produkt</a>"; ?>
+
+    <div class="col">
         <div class="row justify-content-end">
             <div class="col-auto d-flex flex-row align-items-center m-0 p-0">
             
