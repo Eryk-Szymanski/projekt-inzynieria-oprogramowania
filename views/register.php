@@ -4,20 +4,19 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Candy Shop | Rejestracja</title>
-    <?php
-      require_once '../style/links.php';
-    ?>
+    <?php require_once '../style/links.php'; ?>
   </head>
   <body>
     <div class="container-fluid w-100 bg-dark screen-height d-flex justify-content-center align-items-center">
-      <div class="bg-warning bg-gradient rounded d-flex flex-column justify-content-center align-items-center w-50">
+      <div class="mh-200 col col-lg-6 bg-warning bg-gradient rounded d-flex flex-column justify-content-center align-items-center">
 
-        <img src="../images/logo.png" class="w-25"/>
+        <img src="../images/logo.png" class="image-medium"/>
         <h1><a href="./" class="text-decoration-none fw-bolder">Candy Shop</a></h1>
-        <h3>Rejestracja użytkownika</h3>
+        <h3 class="p-2">Rejestracja użytkownika</h3>
 
-        <form action="../scripts/register.php" method="post" class="d-flex flex-row">
-          <div class="d-flex flex-column p-4">
+        <form action="../scripts/register.php" method="post" class="d-flex flex-column flex-lg-row">
+          <div class="d-flex flex-column p-4 border-top border-white">
+            <h5>Twoje dane</h5>
             <label for="name">Imię</label>
             <input type="text" class="form-control" id="name" name="name">
             <label for="surname">Nazwisko</label>
@@ -34,7 +33,8 @@
             <input type="password" class="form-control" id="pass1" name="pass1">
           </div>
           
-          <div class="d-flex flex-column p-4">
+          <div class="d-flex flex-column p-4 border-top border-white">
+            <h5>Adres</h5>
             <label for="zipcode">Kod pocztowy</label>
             <input type="text" class="form-control" id="zipcode" name="zipcode">
             <label for="city">Miasto</label>
@@ -45,14 +45,15 @@
             <input type="text" class="form-control" id="apartment" name="apartment">
           </div>
           
-          <div class="d-flex flex-column p-4">
+          <div class="d-flex flex-column p-4 border-top border-white">
+            <h5>Zgody</h5>
             <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
                 <input type="checkbox" class="btn-check" id="agreeTerms" name="agreeTerms" autocomplete="off" value="agree">
                 <label class="btn btn-outline-primary" for="agreeTerms">
-                  Zatwierdzam <a href="#">regulamin</a>
+                  Zatwierdzam <a href="#" class="text-reset text-decoration-none fw-bolder">regulamin</a>
                 </label>
             </div>
-          <button type="submit" class="btn btn-primary m-4">Zarejestruj</button>
+            <button type="submit" class="btn btn-primary my-4 w-100">Zarejestruj</button>
           </div>
 
         </form>

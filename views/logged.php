@@ -7,23 +7,20 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Candy Shop | Strona Główna</title>
-    <?php
-      require_once '../style/links.php';
-    ?>
+    <?php require_once '../style/links.php'; ?>
   </head>
   <body>
-    <div class="container-fluid w-100 bg-dark screen-height d-flex justify-content-center align-items-center text-light">
+    <?php require_once './components/menu.php'; ?>
+    <div class="container-fluid w-100 bg-dark screen-height d-flex flex-column flex-lg-row justify-content-center text-light menu-buffer">
       <?php
         if (isset($_SESSION['success'])) {
-
-          require_once './components/menu.php';
 
           require_once '../scripts/connect.php';
           if ($_SESSION['user_role'] == 'user') {
             $sql = "SELECT orders.number FROM `orders` WHERE `user_id` = $_SESSION[user_id]";
             $result = $mysqli->query($sql);
             echo <<< USERORDERS
-            <div class="d-flex flex-column bg-success bg-gradient p-4 m-4 rounded">
+            <div class="col col-lg-6 d-flex flex-column bg-success bg-gradient p-4 m-4 rounded">
               <h3>Twoje zamówienia</h3>
               <ul class='list-group'>
 USERORDERS;
@@ -41,7 +38,7 @@ USERORDERS;
             $sql = "SELECT orders.number FROM `orders` WHERE `status` = 0";
             $result = $mysqli->query($sql);
             echo <<< NEWORDERS
-            <div class="d-flex flex-column bg-success bg-gradient p-4 m-4 rounded">
+            <div class="col col-lg-3 d-flex flex-column bg-primary bg-gradient p-4 m-4 rounded">
               <h3>Nowe zamówienia</h3>
               <ul class='list-group'>
 NEWORDERS;
@@ -53,7 +50,7 @@ NEWORDERS;
             $sql = "SELECT orders.number FROM `orders` WHERE `status` = 1";
             $result = $mysqli->query($sql);  
             echo <<< ACCEPTEDORDERS
-            <div class="d-flex flex-column bg-success bg-gradient p-4 m-4 rounded">
+            <div class="col col-lg-3 d-flex flex-column bg-success bg-gradient p-4 m-4 rounded">
               <h3>Zaakceptowane</h3>
               <ul class='list-group'>
 ACCEPTEDORDERS;
@@ -65,7 +62,7 @@ ACCEPTEDORDERS;
             $sql = "SELECT orders.number FROM `orders` WHERE `status` = 2";
             $result = $mysqli->query($sql);  
             echo <<< REJECTEDORDERS
-            <div class="d-flex flex-column bg-success bg-gradient p-4 m-4 rounded">
+            <div class="col col-lg-3 d-flex flex-column bg-danger bg-gradient p-4 m-4 rounded">
               <h3>Odrzucone</h3>
               <ul class='list-group'>
 REJECTEDORDERS;
@@ -78,7 +75,7 @@ REJECTEDORDERS;
             $sql = "SELECT users.id, users.name, users.surname, roles.role FROM `users` JOIN `roles` ON users.role_id = roles.id";
             $result = $mysqli->query($sql);
             echo <<< USERS
-            <div class="d-flex flex-column bg-success bg-gradient p-4 m-4 rounded">
+            <div class="col col-lg-6 d-flex flex-column bg-success bg-gradient p-4 m-4 rounded">
               <h3>Użytkownicy</h3>
               <table>
                 <tr>

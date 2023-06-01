@@ -1,3 +1,15 @@
 .screen-height {
-  height: 100vh;
+  min-height: 100vh;
+}
+
+.menu-buffer {
+  margin-top: 80px;
+}
+
+.image-small {
+  width: 75px;
+}
+
+.image-medium {
+  width: 200px;
 }

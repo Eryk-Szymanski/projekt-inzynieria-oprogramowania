@@ -7,13 +7,11 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Candy Shop | Zamówienie</title>
-    <?php
-      require_once '../style/links.php';
-    ?>
+    <?php require_once '../style/links.php'; ?>
   </head>
   <body>
-    <div class="container-fluid w-100 bg-dark screen-height d-flex justify-content-center align-items-center text-light">
-      <div class="bg-warning bg-gradient rounded d-flex flex-column justify-content-center align-items-center w-50">
+    <div class="container-fluid w-100 bg-dark screen-height d-flex justify-content-center align-items-center text-light menu-buffer">
+      <div class="col col-lg-6 bg-warning bg-gradient rounded d-flex flex-column justify-content-center mx-1 my-4 p-4">
         <?php if (isset($_SESSION['success'])) : ?>
           <?php
 
@@ -39,13 +37,6 @@
                 <h5>Budynek/mieszkanie: $order[apartment]</h5>
                 <h5>Wartość zamówienia: $order[total_price] zł</h5><br>
                 <h5>Utworzono: $order[created_at]</h5><br>
-                <table>
-                  <tr>
-                    <th>Nazwa</th>
-                    <th>Ilość</th>
-                    <th>Cena jednostkowa</th>
-                    <th>Cena końcowa</th>
-                  </tr>
 INFO;
               $products = json_decode($order['products'], false);
               foreach ($products as $product) {
@@ -54,18 +45,17 @@ INFO;
                 $product_data = $result->fetch_assoc();
                 $final_price = intval($product->quantity) * intval($product_data['price']);
                 echo <<<INFO
-                <tr>
-                  <td>$product_data[name]</td>
-                  <td>$product->quantity</td>
-                  <td>$product_data[price]</td>
-                  <td>$final_price</td>
-                </tr>
+                <div class="d-flex flex-column flex-lg-row">
+                  <h3>$product_data[name]</h3>
+                  <p>$product->quantity</p>
+                  <p>$product_data[price]</p>
+                  <p>$final_price</p>
+                </div>
 INFO;
               }
-              echo "</table>";
             }
             if (isset($_SESSION['user_role'])) {
-              if($_SESSION['user_role'] == 'employee') {
+              if($_SESSION['user_role'] == 'employee' && $order['status'] == 0) {
                 echo <<< ACCEPT
                 <form action="../scripts/accept-order.php" method="post">
                   <input type="text" value="accept" hidden="true" name="decision" />

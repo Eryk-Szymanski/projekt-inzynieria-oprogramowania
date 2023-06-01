@@ -13,10 +13,10 @@
     ?>
   </head>
   <body>
-    <div class="container-fluid w-100 bg-dark screen-height d-flex justify-content-center align-items-center text-light">
+    <div class="container-fluid w-100 bg-dark screen-height d-flex justify-content-center text-light menu-buffer">
       <?php if (isset($_SESSION['success'])) : ?>
         <?php require_once './components/menu.php'; ?>
-        <div class="bg-warning bg-gradient rounded d-flex flex-column justify-content-center align-items-center w-50">
+        <div class="col col-lg-6 p-4 mx-1 my-4 bg-warning bg-gradient rounded d-flex flex-column justify-content-center align-items-center">
           <h3>Nowe zamówienie</h3>
 
           <form action="../scripts/new-order.php" method="post">
@@ -89,36 +89,29 @@ DELIVERY_METHOD;
             <button type="submit" class="btn btn-primary m-4">Zamów</button>
           </form>
 
-          <table>
-            <tr>
-              <th>Produkt</th>
-              <th>Ilość</th>
-              <th>Cena za sztukę</th>
-              <th>Cena całkowita</th>
-            </tr>
-
-            <?php
-              if(isset($_SESSION['cart'])) {
-                $cart_value = 0;
-                foreach($_SESSION['cart'] as $key => $value) {
-                  $sql = "SELECT name, price FROM `products` WHERE id = $key";
-                  $result = $mysqli->query($sql);
-                  $product = $result->fetch_assoc();
-                  $final_price = intval($value) * intval($product['price']);
-                  $cart_value += $final_price;
-                  echo <<< INFO
-                  <tr>
-                    <td>$product[name]</td>
-                    <td>$value</td>
-                    <td>$product[price] zł</td>
-                    <td>$final_price zł</td>
-                  </tr>
-    INFO;
-                }
-                $_SESSION['cart_value'] = $cart_value;
-                echo "<h7>Cena końcowa: $_SESSION[cart_value] zł</h7>";
+          <h1>Produkty<h1>
+          <?php
+            if(isset($_SESSION['cart'])) {
+              $cart_value = 0;
+              foreach($_SESSION['cart'] as $key => $value) {
+                $sql = "SELECT name, price FROM `products` WHERE id = $key";
+                $result = $mysqli->query($sql);
+                $product = $result->fetch_assoc();
+                $final_price = intval($value) * intval($product['price']);
+                $cart_value += $final_price;
+                echo <<< INFO
+                <div class="d-flex flex-column flex-lg-row">
+                  <h3>$product[name]</h3>
+                  <p>$value</p>
+                  <p>$product[price] zł</p>
+                  <p>$final_price zł</p>
+                </div>
+INFO;
               }
-            ?>
+              $_SESSION['cart_value'] = $cart_value;
+              echo "<h7>Cena końcowa: $_SESSION[cart_value] zł</h7>";
+            }
+          ?>
           </table>
         </div>
       <?php endif ?>
