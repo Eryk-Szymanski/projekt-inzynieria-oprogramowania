@@ -1,9 +1,13 @@
+body {
+  background-color: rgb(33, 37, 41);
+}
+
 .screen-height {
   min-height: 100vh;
 }
 
 .menu-buffer {
-  margin-top: 80px;
+  margin-top: 70px;
 }
 
 .image-small {

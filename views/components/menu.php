@@ -1,34 +1,39 @@
-<div class="container-fluid fixed-top bg-warning d-flex align-items-center">
+<nav class="navbar navbar-expand-lg bg-warning fixed-top p-0 m-0">
     
-    <a href="./logged.php" class="d-flex align-items-center text-decoration-none fw-bolder">
+    <a href="./logged.php" class="d-flex align-items-center text-decoration-none fw-bolder mx-2">
         <img src="../images/logo.png" class="image-small"/>
-        <h1>Candy Shop</h1>
+        <h3>Candy Shop</h3>
     </a>
 
-    <a href="./logged.php" class="btn btn-primary m-4">Zamówienia</a>
-    <a href="./products.php" class="btn btn-primary m-1">Produkty</a>
+    <button class="navbar-toggler mx-4" type="button" data-bs-toggle="collapse" data-bs-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
 
-    <?php if ($_SESSION['user_role'] == 'employee')
-        echo "<a href='./add-product.php' class='btn btn-primary m-4'>Dodaj produkt</a>"; ?>
+    <div class="collapse navbar-collapse" id="navbarText">
+        <div class="w-100 d-flex flex-column flex-lg-row justify-content-center align-items-center">
+        <a href="./logged.php" class="col-11 col-lg-auto btn btn-primary m-2 my-lg-0 px-4">Zamówienia</a>
+        <a href="./products.php" class="col-11 col-lg-auto btn btn-primary m-2 my-lg-0 px-4">Produkty</a>
 
-    <div class="col">
-        <div class="row justify-content-end">
-            <div class="col-auto d-flex flex-row align-items-center m-0 p-0">
+        <?php if ($_SESSION['user_role'] == 'employee')
+            echo "<a href='./add-product.php' class='col-11 col-lg-auto btn btn-primary m-2 my-lg-0 px-4'>Dodaj produkt</a>"; ?>
+
+        <div class="col">
+            <div class="justify-content-end d-flex flex-row align-items-center">
             
                 <?php
                     echo "<h3 class='m-4'>$_SESSION[user_name]</h3>";
                     if(isset($_SESSION['cart'])) {
-                        echo "<h3 class='text-light my-4 mx-1'>" . count($_SESSION['cart']) . "</h3>";
+                        echo "<h3 class='text-light my-4 my-lg-0 mx-1'>" . count($_SESSION['cart']) . "</h3>";
                     }
                 ?>
                 <a href="./new-order.php"><i class="bi bi-basket3 fs-2 text-light"></i></a>
                 
                 <form action="../scripts/logout.php" method="post">
-                    <button type="submit" class="btn btn-primary m-4">Wyloguj</button>
+                    <button type="submit" class="mx-4 btn btn-danger px-4">Wyloguj</button>
                 </form>
-
             </div>
+        </div>
         </div>
     </div>
 
-</div>
+</nav>
