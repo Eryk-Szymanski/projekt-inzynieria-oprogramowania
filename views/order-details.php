@@ -17,14 +17,8 @@
 
             require_once './components/menu.php';
 
-            if (isset($_GET['number'])) {
-              require_once '../db/connect.php';
-              
-              // Pobranie zamówienia
-              $sql = "SELECT orders.*, users.name, users.surname, users.email, users.phone, addresses.zipcode, addresses.city, addresses.street, addresses.apartment FROM `orders` JOIN `users` ON users.id = orders.user_id JOIN `addresses` ON addresses.id = orders.delivery_address_id WHERE orders.number = $_GET[number]";
-              $result = $mysqli->query($sql);
-              $order = $result->fetch_assoc();
-
+            require_once '../controllers/OrderController/get-order.php';
+            if ($order) {
               echo <<< INFO
                 <h3 class="p-4 m-0 bg-primary bg-gradient rounded">Numer: $order[number]</h3>
                 <br>
@@ -48,41 +42,40 @@
                 <h3 class="px-4 py-2 border-top border-white w-100">Wartość zamówienia: $order[total_price] zł</h3>
                 <h3 class="px-4">Produkty:</h3>
 INFO;
-              $products = json_decode($order['products'], false);
+              $productsJson = json_decode($order['products'], false);
+              require_once '../controllers/ProductController/get-order-products.php';
               echo "<div class='m-2 d-flex flex-wrap flex-column flex-lg-row'>";
               foreach ($products as $product) {
-                $sql = "SELECT name, price FROM `products` WHERE id = $product->product_id";
-                $result = $mysqli->query($sql);
-                $product_data = $result->fetch_assoc();
-                $final_price = intval($product->quantity) * intval($product_data['price']);
                 echo <<<INFO
                 <div class="p-4 m-2 bg-info bg-gradient d-flex flex-column rounded">
-                  <h5>Nazwa: $product_data[name]</h5>
-                  <h5>Ilość: $product->quantity</h5>
-                  <h5>Cena za sztukę: $product_data[price] zł</h5>
-                  <h5>Cena końcowa: $final_price zł</h5>
+                  <h5>Nazwa: $product[name]</h5>
+                  <h5>Ilość: $product[quantity]</h5>
+                  <h5>Cena za sztukę: $product[price] zł</h5>
+                  <h5>Cena końcowa: $product[final_price] zł</h5>
                 </div>
 INFO;
                 }
-              }
-            echo "</div>";
-            if (isset($_SESSION['user_role'])) {
-              if($_SESSION['user_role'] == 'employee' && $order['status'] == 0) {
-                echo <<< OPTIONS
-                <div class="d-flex flex-column flex-lg-row w-100 justify-content-center">
-                  <form action="../controllers/OrderController/accept-order.php" method="post" class="col col-lg-4 mx-4 my-1">
-                    <input type="text" value="accept" hidden="true" name="decision" />
-                    <input type="text" value="$_GET[number]" hidden="true" name="number" />
-                    <button type="submit" class="w-100 btn btn-success">Zaakceptuj</button>
-                  </form>
-                  <form action="../controllers/OrderController/accept-order.php" method="post" class="col col-lg-4 mx-4 my-1">
-                    <input type="text" value="reject" hidden="true" name="decision" />
-                    <input type="text" value="$_GET[number]" hidden="true" name="number" />
-                    <button type="submit" class="w-100 btn btn-danger">Odrzuć</button>
-                  </form>
-                </div>
+              echo "</div>";
+              if (isset($_SESSION['user_role'])) {
+                if($_SESSION['user_role'] == 'employee' && $order['status'] == 0) {
+                  echo <<< OPTIONS
+                  <div class="d-flex flex-column flex-lg-row w-100 justify-content-center">
+                    <form action="../controllers/OrderController/accept-order.php" method="post" class="col col-lg-4 mx-4 my-1">
+                      <input type="text" value="accept" hidden="true" name="decision" />
+                      <input type="text" value="$_GET[number]" hidden="true" name="number" />
+                      <button type="submit" class="w-100 btn btn-success">Zaakceptuj</button>
+                    </form>
+                    <form action="../controllers/OrderController/accept-order.php" method="post" class="col col-lg-4 mx-4 my-1">
+                      <input type="text" value="reject" hidden="true" name="decision" />
+                      <input type="text" value="$_GET[number]" hidden="true" name="number" />
+                      <button type="submit" class="w-100 btn btn-danger">Odrzuć</button>
+                    </form>
+                  </div>
 OPTIONS;
+                }
               }
+            } else {
+              echo "<h3>Nie udało się pobrać zamówienia</h3>";
             }
           ?>
         <?php endif ?>

@@ -44,4 +44,26 @@ function changeOrderStatus($orderNumber, $decision) {
     return ["error" => $error];
 }
 
+function getOrder($orderNumber) {
+    require_once 'connect.php';
+
+    $error = 0;
+    try {
+        $sql = "SELECT orders.*, users.name, users.surname, users.email, users.phone, addresses.zipcode, addresses.city, addresses.street, addresses.apartment FROM `orders` JOIN `users` ON users.id = orders.user_id JOIN `addresses` ON addresses.id = orders.delivery_address_id WHERE orders.number = $orderNumber";
+        $result = $mysqli->query($sql);
+        $order = $result->fetch_assoc();
+    
+        if ($order) {
+            return ["success" => true, "order" => $order];
+        }
+
+    } catch (Exception $e) {
+        if($stmt->affected_rows != 1) {
+            $error = "Nie udało się pobrać zamówienia $orderNumber";
+        }
+        $error = $error . "Message: " . $e->getMessage();
+    }
+    return ["error" => $error];
+}
+
 ?>

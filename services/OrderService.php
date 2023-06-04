@@ -3,9 +3,9 @@
 if($_SESSION == [])
     session_start();
 
-require_once '../../db/OrderRepository.php';
-
+    
 function registerOrder($order) {
+    require_once '../../db/OrderRepository.php';
 
     $error = 0;
     foreach ($order as $key => $value) {
@@ -50,6 +50,7 @@ function registerOrder($order) {
 }
 
 function acceptRejectOrder($data) {
+    require_once '../../db/OrderRepository.php';
     
     $error = 0;
     foreach ($data as $key => $value) {
@@ -81,6 +82,15 @@ function acceptRejectOrder($data) {
     }
 
     header('location: ../../views/logged.php');
+}
+
+function getOneOrder($orderNumber) {
+    require_once '../db/OrderRepository.php';
+    $result = getOrder($orderNumber);
+    if(isset($result['success'])) {
+        return $result['order'];
+    }
+    return null;
 }
 
 ?>

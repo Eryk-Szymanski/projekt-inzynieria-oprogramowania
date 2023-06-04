@@ -29,27 +29,23 @@ function getProductsAll() {
     require_once '../db/ProductRepository.php';
     $result = getProducts();
     if(isset($result['success'])) {
-        echo "<div class='d-flex flex-wrap flex-column flex-lg-row justify-content-center'>";
-        while($product = $result['products']->fetch_assoc()) {
-            if($product['is_available']) {
-            echo <<< INFO
-                <div class="col col-lg-4 bg-info p-4 m-4 rounded ">
-                <h3>$product[name]</h3>
-                <h3>$product[price] zł</h3>
-                <form action="../controllers/ProductController/add-to-cart.php" method="post" class="d-flex flex-column flex-lg-row">
-                    <input type="number" value="$product[id]" hidden="true" name="product_id" />
-                    <label for="quantity">Ilość</label>
-                    <input type="number" class="form-control" value="1" name="quantity"/>
-                    <button type="submit" class="btn btn-primary m-4">Dodaj do koszyka</button>
-                </form>
-                </div>
-INFO;
-            }
-        }
-        echo "</div>";
-    } else {
-        echo "<h3>Nie odnaleziono produktów</h3>";
+        return $result['products'];
     }
+    return null;
+}
+
+function getOrderProducts($productsJson) {
+    require_once '../db/ProductRepository.php';
+    $products = [];
+    foreach($productsJson as $productJson) {
+        $result = getProduct($productJson->product_id);
+        if(isset($result['success'])) {
+            $result['product']['quantity'] = $productJson->quantity;
+            $result['product']['final_price'] = intval($productJson->quantity) * intval($result['product']['price']);
+            array_push($products, $result['product']);
+        }
+    }
+    return $products;
 }
 
 function addToCart($product) {

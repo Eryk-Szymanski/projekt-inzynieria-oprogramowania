@@ -29,13 +29,36 @@ function getProducts() {
     require_once 'connect.php';
 
     $error = 0;
+    $products = [];
     try {
         $sql = "SELECT * FROM `products`";
         $result = $mysqli->query($sql);
-        return ["success" => true, "products" => $result];
+        while($product = $result->fetch_assoc()) {
+            array_push($products, $product);
+        }
+        return ["success" => true, "products" => $products];
     } catch (Exception $e) {
         if($stmt->affected_rows != 1) {
             $error = "Nie udało się pobrać produktów";
+        }
+        $error = $error . "Message: " . $e->getMessage();
+    }
+    return ["error" => $error];
+}
+
+function getProduct($product_id) {
+    $mysqli = new mysqli("localhost", "root", "", "inzynieria-oprogramowania-db");
+
+    $error = 0;
+    try {
+        $sql = "SELECT name, price FROM `products` WHERE id = $product_id";
+        $result = $mysqli->query($sql);
+        $product = $result->fetch_assoc();
+
+        return ["success" => true, "product" => $product];
+    } catch (Exception $e) {
+        if($stmt->affected_rows != 1) {
+            $error = "Nie odnaleziono produktu";
         }
         $error = $error . "Message: " . $e->getMessage();
     }
