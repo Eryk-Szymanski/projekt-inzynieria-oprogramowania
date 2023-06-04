@@ -1,6 +1,6 @@
 <?php
   session_start();
-  require_once '../scripts/connect.php';
+  require_once '../db/connect.php';
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -19,7 +19,7 @@
         <div class="col col-lg-6 p-4 mx-1 my-4 bg-warning bg-gradient rounded d-flex flex-column">
           <h3 class="px-4 py-2">Nowe zamówienie</h3>
 
-          <form action="../scripts/new-order.php" method="post" class="w-100">
+          <form action="../controllers/OrderController/new-order.php" method="post" class="w-100">
             <?php
 
 // Informacje o kliencie
@@ -125,7 +125,8 @@ INFO;
             }
             ?>
           </div>
-          <?php echo "<h4 class='px-4'>Cena końcowa: $_SESSION[cart_value] zł</h4>" ?>
+          <?php if(isset($_SESSION['cart_value'])) 
+            echo "<h4 class='px-4'>Cena końcowa: $_SESSION[cart_value] zł</h4>" ?>
         </div>
       <?php endif ?>
     </div>

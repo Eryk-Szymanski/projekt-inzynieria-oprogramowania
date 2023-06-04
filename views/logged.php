@@ -15,7 +15,7 @@
       <?php
         if (isset($_SESSION['success'])) {
 
-          require_once '../scripts/connect.php';
+          require_once '../db/connect.php';
           if ($_SESSION['user_role'] == 'user') {
             $sql = "SELECT orders.number FROM `orders` WHERE `user_id` = $_SESSION[user_id]";
             $result = $mysqli->query($sql);

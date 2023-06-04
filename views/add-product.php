@@ -17,7 +17,7 @@
         
         <div class="col col-lg-3 bg-warning bg-gradient rounded d-flex flex-column justify-content-center align-items-center w-25 p-4">
           <h3 class="p-2">Nowy produkt</h3>
-          <form action="../scripts/add-product.php" method="post" class="p-2 border-top border-white">
+          <form action="../controllers/ProductController/add-product.php" method="post" class="p-2 border-top border-white">
               <label for="name">Nazwa</label>
               <input type="text" class="form-control" id="name" name="name" />
               <label for="weight">Waga</label>

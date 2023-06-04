@@ -18,7 +18,7 @@
             require_once './components/menu.php';
 
             if (isset($_GET['number'])) {
-              require_once '../scripts/connect.php';
+              require_once '../db/connect.php';
               
               // Pobranie zamówienia
               $sql = "SELECT orders.*, users.name, users.surname, users.email, users.phone, addresses.zipcode, addresses.city, addresses.street, addresses.apartment FROM `orders` JOIN `users` ON users.id = orders.user_id JOIN `addresses` ON addresses.id = orders.delivery_address_id WHERE orders.number = $_GET[number]";
@@ -70,12 +70,12 @@ INFO;
               if($_SESSION['user_role'] == 'employee' && $order['status'] == 0) {
                 echo <<< OPTIONS
                 <div class="d-flex flex-column flex-lg-row w-100 justify-content-center">
-                  <form action="../scripts/accept-order.php" method="post" class="col col-lg-4 mx-4 my-1">
+                  <form action="../controllers/OrderController/accept-order.php" method="post" class="col col-lg-4 mx-4 my-1">
                     <input type="text" value="accept" hidden="true" name="decision" />
                     <input type="text" value="$_GET[number]" hidden="true" name="number" />
                     <button type="submit" class="w-100 btn btn-success">Zaakceptuj</button>
                   </form>
-                  <form action="../scripts/accept-order.php" method="post" class="col col-lg-4 mx-4 my-1">
+                  <form action="../controllers/OrderController/accept-order.php" method="post" class="col col-lg-4 mx-4 my-1">
                     <input type="text" value="reject" hidden="true" name="decision" />
                     <input type="text" value="$_GET[number]" hidden="true" name="number" />
                     <button type="submit" class="w-100 btn btn-danger">Odrzuć</button>

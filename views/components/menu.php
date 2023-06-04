@@ -18,7 +18,7 @@
             echo "<a href='./add-product.php' class='col-11 col-lg-auto btn btn-primary m-2 my-lg-0 px-4'>Dodaj produkt</a>"; ?>
 
         <div class="col">
-            <div class="justify-content-end d-flex flex-row align-items-center">
+            <div class="justify-content-end d-flex flex-row align-items-center flex-wrap p-4 p-lg-0">
             
                 <?php
                     echo "<h3 class='m-4'>$_SESSION[user_name]</h3>";
@@ -28,8 +28,8 @@
                 ?>
                 <a href="./new-order.php"><i class="bi bi-basket3 fs-2 text-light"></i></a>
                 
-                <form action="../scripts/logout.php" method="post">
-                    <button type="submit" class="mx-4 btn btn-danger px-4">Wyloguj</button>
+                <form action="../controllers/AccountController/logout.php" method="post">
+                    <button type="submit" class="mx-4 px-4 btn btn-danger">Wyloguj</button>
                 </form>
             </div>
         </div>

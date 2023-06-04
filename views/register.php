@@ -14,7 +14,7 @@
         <h1><a href="./" class="text-decoration-none fw-bolder">Candy Shop</a></h1>
         <h3 class="p-2">Rejestracja użytkownika</h3>
 
-        <form action="../scripts/register.php" method="post" class="d-flex flex-column flex-lg-row">
+        <form action="../controllers/AccountController/register.php" method="post" class="d-flex flex-column flex-lg-row">
           <div class="d-flex flex-column p-4 border-top border-white">
             <h5>Twoje dane</h5>
             <label for="name">Imię</label>
