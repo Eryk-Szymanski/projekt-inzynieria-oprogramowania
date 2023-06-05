@@ -3,16 +3,13 @@
 if($_SESSION == [])
     session_start();
 
-require_once '../../db/AccountRepository.php';
-
+    
 function loginUser(string $email) {
+    require_once '../../db/AccountRepository.php';
 
     $error = 0;
-    foreach ($_POST as $key => $value) {
-        if (empty($value)) {
-            $error = 1;
-        }
-    }
+    if (empty($email))
+        $error = 1;
 
     if($error == 1) {
         $_SESSION['error'] = "Wypełnij wszystkie pola";
@@ -42,6 +39,7 @@ function loginUser(string $email) {
 }
 
 function registerUser($user) {
+    require_once '../../db/AccountRepository.php';
 
     $error = 0;
     foreach ($user as $key => $value) {
@@ -82,6 +80,53 @@ function logoutUser() {
     session_destroy();
 
     header('location: ../../');
+}
+
+function getUserData($user_id) {
+    require_once '../db/AccountRepository.php';
+
+    $error = 0;
+    if (empty($user_id))
+        $error = 1;
+
+    if($error == 1) {
+        echo "<script>history.back();</script>";
+        exit();
+    }
+
+    $result = getUser($user_id);
+    if(isset($result['success'])) {
+        return $result['user'];
+    }
+    return null;
+}
+
+function getAddressData($address_id) {
+    require_once '../db/AccountRepository.php';
+
+    $error = 0;
+    if (empty($address_id))
+        $error = 1;
+
+    if($error == 1) {
+        echo "<script>history.back();</script>";
+        exit();
+    }
+
+    $result = getAddress($address_id);
+    if(isset($result['success'])) {
+        return $result['address'];
+    }
+    return null;
+}
+
+function getAllUsers() {
+    require_once '../db/AccountRepository.php';
+    $result = getUsers();
+    if(isset($result['success'])) {
+        return $result['users'];
+    }
+    return null;
 }
 
 ?>

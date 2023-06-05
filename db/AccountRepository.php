@@ -50,4 +50,73 @@ function createUser($user) {
     return ["error" => $error];
 }
 
+function getUser($user_id) {
+    $mysqli = new mysqli("localhost", "root", "", "inzynieria-oprogramowania-db");
+
+    $error = 0;
+    try {
+        $sql = "SELECT id, name, surname, email, phone, address_id FROM `users` WHERE id = $user_id";
+        $result = $mysqli->query($sql);
+        $user = $result->fetch_assoc();
+
+        if ($user) {
+            return [ "success" => true, "user" => $user];
+        }
+    }
+    catch (Exception $e) {
+        if($stmt->affected_rows != 1) {
+            $error = "Nie utworzono użytkownika $email";
+        }
+        $error = $error . "Message: " . $e->getMessage();
+    }
+    return ["error" => $error];
+}
+
+function getAddress($address_id) {
+    $mysqli = new mysqli("localhost", "root", "", "inzynieria-oprogramowania-db");
+
+    $error = 0;
+    try {
+        $sql = "SELECT zipcode, city, street, apartment FROM `addresses` WHERE id = $address_id";
+        $result = $mysqli->query($sql);
+        $address = $result->fetch_assoc();
+
+        if ($address) {
+            return [ "success" => true, "address" => $address];
+        }
+    }
+    catch (Exception $e) {
+        if($stmt->affected_rows != 1) {
+            $error = "Nie utworzono użytkownika $email";
+        }
+        $error = $error . "Message: " . $e->getMessage();
+    }
+    return ["error" => $error];
+}
+
+function getUsers() {
+    $mysqli = new mysqli("localhost", "root", "", "inzynieria-oprogramowania-db");
+
+    $error = 0;
+    try {
+        $sql = "SELECT users.id, users.name, users.surname, roles.role FROM `users` JOIN `roles` ON users.role_id = roles.id";
+        $result = $mysqli->query($sql);
+        $rows = [];
+        while($row = $result->fetch_assoc()) {
+            array_push($rows, $row);
+        }
+    
+        if ($rows) {
+            return ["success" => true, "users" => $rows];
+        }
+    }
+    catch (Exception $e) {
+        if($stmt->affected_rows != 1) {
+            $error = "Nie pobrano użytkowników";
+        }
+        $error = $error . "Message: " . $e->getMessage();
+    }
+    return ["error" => $error];
+}
+
 ?>

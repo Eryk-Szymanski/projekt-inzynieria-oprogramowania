@@ -66,4 +66,104 @@ function getOrder($orderNumber) {
     return ["error" => $error];
 }
 
+function getPaymentMethods() {
+    $mysqli = new mysqli("localhost", "root", "", "inzynieria-oprogramowania-db");
+
+    $error = 0;
+    try {
+        $sql = "SELECT * FROM `payment_methods`";
+        $result = $mysqli->query($sql);
+        $rows = [];
+        while($row = $result->fetch_assoc()) {
+            array_push($rows, $row);
+        }
+    
+        if ($rows) {
+            return ["success" => true, "payment_methods" => $rows];
+        }
+
+    } catch (Exception $e) {
+        if($stmt->affected_rows != 1) {
+            $error = "Nie udało się pobrać metod płatności";
+        }
+        $error = $error . "Message: " . $e->getMessage();
+    }
+    return ["error" => $error];
+}
+
+function getDeliveryMethods() {
+    $mysqli = new mysqli("localhost", "root", "", "inzynieria-oprogramowania-db");
+
+    $error = 0;
+    try {
+        $sql = "SELECT * FROM `delivery_methods`";
+        $result = $mysqli->query($sql);
+        $rows = [];
+        while($row = $result->fetch_assoc()) {
+            array_push($rows, $row);
+        }
+    
+        if ($rows) {
+            return ["success" => true, "delivery_methods" => $rows];
+        }
+
+    } catch (Exception $e) {
+        if($stmt->affected_rows != 1) {
+            $error = "Nie udało się pobrać metod dostawy";
+        }
+        $error = $error . "Message: " . $e->getMessage();
+    }
+    return ["error" => $error];
+}
+
+function getUserOrders($user_id) {
+    $mysqli = new mysqli("localhost", "root", "", "inzynieria-oprogramowania-db");
+
+    $error = 0;
+    try {
+        $sql = "SELECT orders.number FROM `orders` WHERE `user_id` = $user_id";
+        $result = $mysqli->query($sql);
+        $rows = [];
+        while($row = $result->fetch_assoc()) {
+            array_push($rows, $row);
+        }
+    
+        if ($rows) {
+            return ["success" => true, "orders" => $rows];
+        }
+
+    } catch (Exception $e) {
+        if($stmt->affected_rows != 1) {
+            $error = "Nie udało się pobrać zamówień";
+        }
+        $error = $error . "Message: " . $e->getMessage();
+    }
+    return ["error" => $error];
+}
+
+function getOrdersByStatus($status) {
+    $mysqli = new mysqli("localhost", "root", "", "inzynieria-oprogramowania-db");
+
+    $error = 0;
+    try {
+        $sql = "SELECT orders.number FROM `orders` WHERE `status` = $status";
+        $result = $mysqli->query($sql);
+        $rows = [];
+        while($row = $result->fetch_assoc()) {
+            array_push($rows, $row);
+        }
+    
+        if ($rows) {
+            return ["success" => true, "orders" => $rows];
+        }
+
+    } catch (Exception $e) {
+        if($stmt->affected_rows != 1) {
+            $error = "Nie udało się pobrać zamówień";
+        }
+        $error = $error . "Message: " . $e->getMessage();
+    }
+    return ["error" => $error];
+}
+
 ?>

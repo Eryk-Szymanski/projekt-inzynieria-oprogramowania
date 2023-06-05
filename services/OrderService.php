@@ -93,4 +93,40 @@ function getOneOrder($orderNumber) {
     return null;
 }
 
+function getPaymentMethodsData() {
+    require_once '../db/OrderRepository.php';
+    $result = getPaymentMethods();
+    if(isset($result['success'])) {
+        return $result['payment_methods'];
+    }
+    return null;
+}
+
+function getDeliveryMethodsData() {
+    require_once '../db/OrderRepository.php';
+    $result = getDeliveryMethods();
+    if(isset($result['success'])) {
+        return $result['delivery_methods'];
+    }
+    return null;
+}
+
+function getUserOrdersData($user_id) {
+    require_once '../db/OrderRepository.php';
+    $result = getUserOrders($user_id);
+    if(isset($result['success'])) {
+        return $result['orders'];
+    }
+    return null;
+}
+
+function getOrdersDataByStatus($status) {
+    require_once '../db/OrderRepository.php';
+    $result = getOrdersByStatus($status);
+    if(isset($result['success'])) {
+        return $result['orders'];
+    }
+    return null;
+}
+
 ?>

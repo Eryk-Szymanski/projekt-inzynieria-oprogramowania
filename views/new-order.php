@@ -23,14 +23,10 @@
             <?php
 
 // Informacje o kliencie
-              $sql = "SELECT id, name, surname, email, phone, address_id FROM `users` WHERE id = $_SESSION[user_id]";
-              $result = $mysqli->query($sql);
-              $user = $result->fetch_assoc();
+              require_once('../controllers/AccountController/get-user.php');
 
 // Informacje o adresie dostawy
-              $sql = "SELECT zipcode, city, street, apartment FROM `addresses` WHERE id = $user[address_id]";
-              $result = $mysqli->query($sql);
-              $address = $result->fetch_assoc();
+              require_once('../controllers/AccountController/get-address.php');
               echo <<< USER_DATA
                 <div class="d-flex flex-column flex-lg-row">
                   <div class="col col-lg-6 p-4 border-top border-white">
@@ -53,12 +49,11 @@
 USER_DATA;
 
 // Metoda płatności
-              $sql = "SELECT * FROM `payment_methods`";
-              $result = $mysqli->query($sql);
+              require_once('../controllers/OrderController/get-payment-methods.php');
               echo "<div class='d-flex flex-column flex-lg-row'>";
               echo "<div class='col col-lg-6 p-4 border-top border-white'>";
               echo "<h5>Wybierz metodę płatności:</h5>";
-              while($payment_method = $result->fetch_assoc()) {
+              foreach($payment_methods as $payment_method) {
                 echo <<<PAYMENT_METHOD
                   <div class="form-check">
                     <input class="form-check-input" type="radio" name="paymentMethod" id="paymentMethod" value="$payment_method[id]">
@@ -70,11 +65,10 @@ PAYMENT_METHOD;
               }
               echo "</div>";
 // Sposób dostawy  
-              $sql = "SELECT * FROM `delivery_methods`";
-              $result = $mysqli->query($sql);
+              require_once('../controllers/OrderController/get-delivery-methods.php');
               echo "<div class='col col-lg-6 p-4 border-top border-white'>";
               echo "<h5>Wybierz sposób dostawy:</h5>";
-              while($delivery_method = $result->fetch_assoc()) {
+              foreach($delivery_methods as $delivery_method) {
                 echo <<< DELIVERY_METHOD
                   <div class="form-check">
                     <input class="form-check-input" type="radio" name="deliveryMethod" id="deliveryMethod" value="$delivery_method[id]">
@@ -105,19 +99,23 @@ DELIVERY_METHOD;
           <div class='m-2 d-flex flex-wrap flex-column flex-lg-row'>
           <?php
             if(isset($_SESSION['cart'])) {
-              $cart_value = 0;
+              $products = array();
               foreach($_SESSION['cart'] as $key => $value) {
-                $sql = "SELECT name, price FROM `products` WHERE id = $key";
-                $result = $mysqli->query($sql);
-                $product = $result->fetch_assoc();
-                $final_price = intval($value) * intval($product['price']);
-                $cart_value += $final_price;
+                  $product = array('product_id' => $key, 'quantity' => $value);
+                  array_push($products, $product);
+              }
+              $test = json_encode($products);
+              $productsJson = json_decode($test);
+              $cart_value = 0;
+              require_once '../controllers/ProductController/get-order-products.php';
+              foreach($products as $product) {
+                $cart_value += $product['final_price'];
                 echo <<< INFO
                 <div class="p-4 m-2 bg-info bg-gradient d-flex flex-column rounded">
                   <h5>Nazwa: $product[name]</h5>
-                  <h5>Ilość: $value</h5>
+                  <h5>Ilość: $product[quantity]</h5>
                   <h5>Cena za sztukę: $product[price] zł</h5>
-                  <h5>Cena końcowa: $final_price zł</h5>
+                  <h5>Cena końcowa: $product[final_price] zł</h5>
                 </div>
 INFO;
               }
