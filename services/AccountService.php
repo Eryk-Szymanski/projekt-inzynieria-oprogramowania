@@ -1,9 +1,7 @@
 <?php declare(strict_types=1);
 
-if($_SESSION == [])
-    session_start();
+session_start();
 
-    
 function loginUser(string $email) {
     require_once '../../db/AccountRepository.php';
 
@@ -55,8 +53,6 @@ function registerUser($user) {
         exit();
     }
 
-    require_once 'connect.php';
-    
     $user['hash'] = password_hash($user['pass1'], PASSWORD_ARGON2ID); 
     
     $result = createUser($user);
