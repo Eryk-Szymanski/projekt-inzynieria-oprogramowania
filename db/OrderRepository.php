@@ -49,7 +49,28 @@ function getOrder($orderNumber) {
 
     $error = 0;
     try {
-        $sql = "SELECT orders.*, users.name, users.surname, users.email, users.phone, addresses.zipcode, addresses.city, addresses.street, addresses.apartment FROM `orders` JOIN `users` ON users.id = orders.user_id JOIN `addresses` ON addresses.id = orders.delivery_address_id WHERE orders.number = $orderNumber";
+        $sql = "SELECT 
+            orders.*, 
+            users.name as username, 
+            users.surname, 
+            users.email, 
+            users.phone, 
+            addresses.zipcode, 
+            addresses.city, 
+            addresses.street, 
+            addresses.apartment,
+            payment_methods.name as payment,
+            delivery_methods.*
+            FROM `orders` 
+            JOIN `users` 
+            ON users.id = orders.user_id 
+            JOIN `addresses` 
+            ON addresses.id = orders.delivery_address_id 
+            JOIN `payment_methods` 
+            ON payment_methods.id = orders.payment_method_id 
+            JOIN `delivery_methods` 
+            ON delivery_methods.id = orders.delivery_method_id 
+            WHERE orders.number = $orderNumber";
         $result = $mysqli->query($sql);
         $order = $result->fetch_assoc();
     

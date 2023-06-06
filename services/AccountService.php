@@ -1,8 +1,8 @@
 <?php declare(strict_types=1);
 
-session_start();
-
 function loginUser(string $email) {
+    session_start();
+
     require_once '../../db/AccountRepository.php';
 
     $error = 0;

@@ -17,6 +17,9 @@
         <?php if ($_SESSION['user_role'] == 'employee')
             echo "<a href='./add-product.php' class='col-11 col-lg-auto btn btn-primary m-2 my-lg-0 px-4'>Dodaj produkt</a>"; ?>
 
+        <?php if ($_SESSION['user_role'] == 'employee' || $_SESSION['user_role'] == 'admin')
+            echo "<a href='./users.php' class='col-11 col-lg-auto btn btn-primary m-2 my-lg-0 px-4'>Użytkownicy</a>"; ?>
+
         <div class="col">
             <div class="justify-content-end d-flex flex-row align-items-center flex-wrap p-4 p-lg-0">
             

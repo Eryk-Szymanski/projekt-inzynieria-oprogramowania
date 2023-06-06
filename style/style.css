@@ -17,3 +17,8 @@ body {
 .image-medium {
   width: 200px;
 }
+
+.bg-footer {
+  background-color: #111111;
+  color: #999999;
+}

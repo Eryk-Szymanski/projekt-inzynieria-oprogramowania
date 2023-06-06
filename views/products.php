@@ -23,12 +23,12 @@
               if($product['is_available']) {
               echo <<< INFO
                   <div class="col col-lg-4 bg-info p-4 m-4 rounded ">
-                  <h3>$product[name]</h3>
+                  <a href='./product-details.php?product_id=$product[id]' class='text-decoration-none'><h3>$product[name]</h3></a>
                   <h3>$product[price] zł</h3>
-                  <form action="../controllers/ProductController/add-to-cart.php" method="post" class="d-flex flex-column flex-lg-row">
+                  <form action="../controllers/ProductController/add-to-cart.php" method="post" class="d-flex flex-column flex-lg-row align-items-center">
                       <input type="number" value="$product[id]" hidden="true" name="product_id" />
-                      <label for="quantity">Ilość</label>
-                      <input type="number" class="form-control" value="1" name="quantity"/>
+                      <label for="quantity" class="fs-3">Ilość</label>
+                      <input type="number" class="form-control m-4 w-25" value="1" name="quantity"/>
                       <button type="submit" class="btn btn-primary m-4">Dodaj do koszyka</button>
                   </form>
                   </div>
@@ -42,5 +42,6 @@ INFO;
         ?>
       </div>
     </div>
+    <?php require_once('./components/footer.php'); ?>
   </body>
 </html>

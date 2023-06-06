@@ -26,7 +26,7 @@
                 <div class="d-flex flex-column flex-lg-row">
                   <div class="col col-lg-6 p-4 border-top border-white">
                     <h3>Dane</h3>
-                    <h5>Imię: $order[name]</h5>
+                    <h5>Imię: $order[username]</h5>
                     <h5>Nazwisko: $order[surname]</h5>
                     <h5>Email: $order[email]</h5>
                     <h5>Telefon: $order[phone]</h5>
@@ -39,6 +39,18 @@
                     <h5>Budynek/mieszkanie: $order[apartment]</h5>
                   </div>
                 </div>
+                <div class="d-flex flex-column flex-lg-row">
+                  <div class="col col-lg-6 p-4 border-top border-white">
+                    <h3>Dostawa</h3>
+                    <h5>$order[name]</h5>
+                    <h5>Cena: $order[price] zł</h5>
+                    <h5>Szacowany czas dostawy: $order[delivery_time] dni</h5>
+                  </div>
+                  <div class="col col-lg-6 p-4 border-top border-white">
+                    <h3>Płatność</h3>
+                    <h5>$order[payment]</h5>
+                  </div>
+                </div>
                 <h3 class="px-4 py-2 border-top border-white w-100">Wartość zamówienia: $order[total_price] zł</h3>
                 <h3 class="px-4">Produkty:</h3>
 INFO;
@@ -48,7 +60,7 @@ INFO;
               foreach ($products as $product) {
                 echo <<<INFO
                 <div class="p-4 m-2 bg-info bg-gradient d-flex flex-column rounded">
-                  <h5>Nazwa: $product[name]</h5>
+                  <h5>Nazwa: <a href='./product-details.php?product_id=$product[id]' class='text-decoration-none'>$product[name]</a></h5>
                   <h5>Ilość: $product[quantity]</h5>
                   <h5>Cena za sztukę: $product[price] zł</h5>
                   <h5>Cena końcowa: $product[final_price] zł</h5>
@@ -81,5 +93,6 @@ OPTIONS;
         <?php endif ?>
       </div>
     </div>
+    <?php require_once('./components/footer.php'); ?>
   </body>
 </html>

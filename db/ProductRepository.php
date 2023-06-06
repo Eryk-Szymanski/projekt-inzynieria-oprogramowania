@@ -51,7 +51,26 @@ function getProduct($product_id) {
 
     $error = 0;
     try {
-        $sql = "SELECT name, price FROM `products` WHERE id = $product_id";
+        $sql = "SELECT id, name, price FROM `products` WHERE id = $product_id";
+        $result = $mysqli->query($sql);
+        $product = $result->fetch_assoc();
+
+        return ["success" => true, "product" => $product];
+    } catch (Exception $e) {
+        if($stmt->affected_rows != 1) {
+            $error = "Nie odnaleziono produktu";
+        }
+        $error = $error . "Message: " . $e->getMessage();
+    }
+    return ["error" => $error];
+}
+
+function getProductData($product_id) {
+    $mysqli = new mysqli("localhost", "root", "", "inzynieria-oprogramowania-db");
+
+    $error = 0;
+    try {
+        $sql = "SELECT * FROM `products` WHERE id = $product_id";
         $result = $mysqli->query($sql);
         $product = $result->fetch_assoc();
 

@@ -74,6 +74,10 @@ PAYMENT_METHOD;
                     <input class="form-check-input" type="radio" name="deliveryMethod" id="deliveryMethod" value="$delivery_method[id]">
                     <label class="form-check-label" for="deliveryMethod">
                       $delivery_method[name]
+                      <br>
+                      Cena: $delivery_method[price] zł
+                      <br>
+                      Przewidywany czas dostawy: $delivery_method[delivery_time] dni
                     </label>
                   </div>
 DELIVERY_METHOD;
@@ -112,7 +116,7 @@ DELIVERY_METHOD;
                 $cart_value += $product['final_price'];
                 echo <<< INFO
                 <div class="p-4 m-2 bg-info bg-gradient d-flex flex-column rounded">
-                  <h5>Nazwa: $product[name]</h5>
+                  <h5>Nazwa: <a href='./product-details.php?product_id=$product[id]' class='text-decoration-none'>$product[name]</a></h5>
                   <h5>Ilość: $product[quantity]</h5>
                   <h5>Cena za sztukę: $product[price] zł</h5>
                   <h5>Cena końcowa: $product[final_price] zł</h5>
@@ -128,5 +132,6 @@ INFO;
         </div>
       <?php endif ?>
     </div>
+    <?php require_once('./components/footer.php'); ?>
   </body>
 </html>

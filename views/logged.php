@@ -32,7 +32,7 @@ USERORDERS;
             }
             echo "</ul></div>";
           }
-          elseif ($_SESSION['user_role'] == 'employee') {
+          elseif ($_SESSION['user_role'] == 'employee' || $_SESSION['user_role'] == 'admin') {
             require_once('../controllers/OrderController/get-orders-by-status.php');
             echo <<< NEWORDERS
             <div class="col col-lg-3 d-flex flex-column p-4 m-2">
@@ -61,33 +61,9 @@ REJECTEDORDERS;
             }
             echo "</div>";
           }
-          elseif ($_SESSION['user_role'] == 'admin') {
-            require_once('../controllers/AccountController/get-users.php');
-            echo <<< USERS
-            <div class="col col-lg-6 d-flex flex-column p-4 m-4">
-              <h3 class="bg-primary bg-gradient p-4 my-4 rounded w-100">Użytkownicy</h3>
-              <table>
-                <tr>
-                  <th>Id</th>
-                  <th>Imię</th>
-                  <th>Nazwisko</th>
-                  <th>Rola</th>
-                </tr>
-USERS;
-            foreach ($users as $user) {
-              echo <<< USERSADMIN
-              <tr>
-                <td>$user[id]</td>
-                <td>$user[name]</td>
-                <td>$user[surname]</td>
-                <td>$user[role]</td>
-              </tr>
-USERSADMIN;
-            }
-            echo "</table>";
-          }
         }
       ?>
     </div>
+    <?php require_once('./components/footer.php'); ?>
   </body>
 </html>

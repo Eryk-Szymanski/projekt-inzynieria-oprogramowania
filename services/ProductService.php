@@ -34,6 +34,16 @@ function getProductsAll() {
     return null;
 }
 
+
+function getProductDetails($product_id) {
+    require_once '../db/ProductRepository.php';
+    $result = getProductData($product_id);
+    if(isset($result['success'])) {
+        return $result['product'];
+    }
+    return null;
+}
+
 function getOrderProducts($productsJson) {
     require_once '../db/ProductRepository.php';
     $products = [];
