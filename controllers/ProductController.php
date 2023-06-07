@@ -8,6 +8,14 @@
             addProduct($data);
         }
 
+        public static function editProduct($data) {
+            updateProduct($data);
+        }
+
+        public static function deleteProduct($product_id) {
+            removeProduct($product_id);
+        }
+
         public static function addProductToCart($data) {
             addToCart($data);
         }

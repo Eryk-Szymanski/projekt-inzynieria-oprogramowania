@@ -36,7 +36,21 @@
 
     if (isset($_POST['addProduct'])){
         unset($_POST['addProduct']);
+        require_once('./uploadFile.php');
+        $_POST['image_path'] = $target_file;
         ProductController::newProduct($_POST);
+    }
+
+    if (isset($_POST['editProduct'])){
+        unset($_POST['editProduct']);
+        require_once('./uploadFile.php');
+        $_POST['image_path'] = $target_file;
+        ProductController::editProduct($_POST);
+    }
+
+    if (isset($_POST['deleteProduct'])){
+        unset($_POST['deleteProduct']);
+        ProductController::deleteProduct($_POST['product_id']);
     }
 
     if (isset($_POST['addToCart'])){

@@ -22,6 +22,48 @@ function addProduct($product) {
     header('location: ../views/products.php');
 }
 
+function updateProduct($product) {
+    require_once '../db/ProductRepository.php';
+    
+    $error = 0;
+    foreach ($_POST as $key => $value) {
+        if (empty($value)) {
+            $error = 1;
+        }
+    }
+
+    if($error == 1) {
+        echo "<script>history.back();</script>";
+        exit();
+    }
+
+    $result = changeProduct($product);
+    if(isset($result['error']))
+        $_SESSION['error'] = $result['error'];
+
+    header('location: ../views/products.php');
+}
+
+function removeProduct($product_id) {
+    require_once '../db/ProductRepository.php';
+    
+    $error = 0;
+    if (empty($product_id)) {
+        $error = 1;
+    }
+
+    if($error == 1) {
+        echo "<script>history.back();</script>";
+        exit();
+    }
+
+    $result = deleteProduct($product_id);
+    if(isset($result['error']))
+        $_SESSION['error'] = $result['error'];
+
+    header('location: ../views/products.php');
+}
+
 function getProductsAll() {
     require_once '../db/ProductRepository.php';
     $result = getProducts();

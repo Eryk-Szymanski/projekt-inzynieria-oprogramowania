@@ -23,7 +23,16 @@
                 $available = "<i class='bi bi-x-square-fill text-danger mx-2'></i>Niedostępny";
                 if($product['is_available'] == 1)
                     $available = "<i class='bi bi-check-square-fill text-success mx-2'></i>Dostępny";
+                $img = "";
+                if($product['image_path'])
+                  $img = "<img src='$product[image_path]' class='image-medium' />";
               echo <<< INFO
+                $img
+                <a href="./edit-product.php?product_id=$product[id]" class='text-decoration-none'><h5>Edytuj <i class="bi bi-pencil-fill"></i></h5></a>
+                <form action="../controllers/handleForm.php" method="post" class="col col-lg-4 mx-4 my-1">
+                  <input type="number" value="$product[id]" hidden="true" name="product_id" />
+                  <button type="submit" class="w-100 btn btn-danger" name="deleteProduct"><i class="bi bi-trash3-fill"></i> Usuń</button>
+                </form>
                 <h3>Detale produktu</h3>
                 <h1>$product[name]</h1>
                 <h5>Waga: $product[weight]</h5>

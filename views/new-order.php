@@ -70,7 +70,7 @@ PAYMENT_METHOD;
               foreach($delivery_methods as $delivery_method) {
                 echo <<< DELIVERY_METHOD
                   <div class="form-check">
-                    <input class="form-check-input" type="radio" name="deliveryMethod" id="deliveryMethod" value="$delivery_method[id]">
+                    <input class="form-check-input" type="radio" name="deliveryMethod" id="deliveryMethod" price="$delivery_method[price]" days="$delivery_method[delivery_time]" value="$delivery_method[id]">
                     <label class="form-check-label" for="deliveryMethod">
                       $delivery_method[name]
                       <br>
@@ -98,7 +98,7 @@ DELIVERY_METHOD;
             </div>
           </form>
           <br>
-          <h3 class="px-4">Produkty:</h3>
+          <h3 class='px-4'>Produkty:</h3>
           <div class='m-2 d-flex flex-wrap flex-column flex-lg-row'>
           <?php
             if(isset($_SESSION['cart'])) {
@@ -113,24 +113,32 @@ DELIVERY_METHOD;
               $products = ProductController::getOrderProducts($productsJson);
               foreach($products as $product) {
                 $cart_value += $product['final_price'];
-                echo <<< INFO
-                <div class="p-4 m-2 bg-info bg-gradient d-flex flex-column rounded">
-                  <h5>Nazwa: <a href='./product-details.php?product_id=$product[id]' class='text-decoration-none'>$product[name]</a></h5>
-                  <h5>Ilość: $product[quantity]</h5>
-                  <h5>Cena za sztukę: $product[price] zł</h5>
-                  <h5>Cena końcowa: $product[final_price] zł</h5>
-                </div>
-INFO;
+                $img = "";
+                if($product['image_path'])
+                  $img = "<img src='$product[image_path]' class='image-medium' />";
+                echo <<< PRODUCT
+                  <div class='p-4 m-2 bg-info bg-gradient d-flex flex-column rounded'>
+                    $img
+                    <h5>Nazwa: <a href='./product-details.php?product_id=$product[id]' class='text-decoration-none'>$product[name]</a></h5>
+                    <h5>Ilość: $product[quantity]</h5>
+                    <h5>Cena za sztukę: $product[price] zł</h5>
+                    <h5>Cena końcowa: $product[final_price] zł</h5>
+                  </div>
+PRODUCT;
               }
               $_SESSION['cart_value'] = $cart_value;
+              echo "<p id='cart_value' hidden>$cart_value</p>";
             }
             ?>
           </div>
           <?php if(isset($_SESSION['cart_value'])) 
-            echo "<h4 class='px-4'>Cena końcowa: $_SESSION[cart_value] zł</h4>" ?>
+            echo "<h4 class='px-4' id='final_price'>Cena końcowa: $_SESSION[cart_value] zł</h4>";
+            echo "<h4 class='px-4' id='delivery_date'>Przewidywany termin dostawy: " . date("Y-n-j") . "</h4>";
+          ?>
         </div>
       <?php endif ?>
     </div>
     <?php require_once('./components/footer.php'); ?>
+    <script src="../scripts/deliveryMethodCheckbox.js"></script>
   </body>
 </html>
