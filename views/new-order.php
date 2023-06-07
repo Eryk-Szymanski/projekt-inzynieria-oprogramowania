@@ -1,6 +1,7 @@
 <?php
   session_start();
   require_once '../db/connect.php';
+  require_once('../controllers/AccountController.php');
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -21,12 +22,9 @@
 
           <form action="../controllers/OrderController/new-order.php" method="post" class="w-100">
             <?php
-
-// Informacje o kliencie
-              require_once('../controllers/AccountController/get-user.php');
-
-// Informacje o adresie dostawy
-              require_once('../controllers/AccountController/get-address.php');
+            
+              $user = AccountController::getUser($_SESSION['user_id']);
+              $address = AccountController::getAddress($user['address_id']);
               echo <<< USER_DATA
                 <div class="d-flex flex-column flex-lg-row">
                   <div class="col col-lg-6 p-4 border-top border-white">
