@@ -17,7 +17,7 @@
         
         <div class="col col-lg-3 bg-warning bg-gradient rounded d-flex flex-column justify-content-center align-items-center w-25 p-4">
           <h3 class="p-2">Nowy produkt</h3>
-          <form action="../controllers/ProductController/add-product.php" method="post" class="p-2 border-top border-white">
+          <form action="../controllers/handleForm.php" method="post" class="p-2 border-top border-white">
               <label for="name">Nazwa</label>
               <input type="text" class="form-control" id="name" name="name" />
               <label for="weight">Waga</label>
@@ -35,7 +35,7 @@
               <input type="number" class="form-control" id="calories" name="calories" />
               <label for="price">Cena</label>
               <input type="number" class="form-control" id="price" name="price" />
-              <button type="submit" class="btn btn-primary my-4 w-100">Dodaj produkt</button>
+              <button type="submit" class="btn btn-primary my-4 w-100" name="addProduct">Dodaj produkt</button>
           </form>
         </div>
 

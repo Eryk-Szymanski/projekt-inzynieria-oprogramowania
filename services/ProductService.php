@@ -1,10 +1,7 @@
 <?php declare(strict_types=1);
 
-if($_SESSION == [])
-    session_start();
-
 function addProduct($product) {
-    require_once '../../db/ProductRepository.php';
+    require_once '../db/ProductRepository.php';
     
     $error = 0;
     foreach ($_POST as $key => $value) {
@@ -22,7 +19,7 @@ function addProduct($product) {
     if(isset($result['error']))
         $_SESSION['error'] = $result['error'];
 
-    header('location: ../../views/products.php');
+    header('location: ../views/products.php');
 }
 
 function getProductsAll() {
@@ -66,6 +63,8 @@ function addToCart($product) {
         }
     }
 
+    session_start();
+
     if($error == 1) {
         echo "<script>history.back();</script>";
         exit();
@@ -79,7 +78,7 @@ function addToCart($product) {
         $_SESSION['error'] = "Nie dodano produktu";
     }
 
-    header('location: ../../views/products.php');
+    header('location: ../views/products.php');
 }
 
 ?>

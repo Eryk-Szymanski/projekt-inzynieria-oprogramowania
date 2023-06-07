@@ -1,11 +1,8 @@
 <?php declare(strict_types=1);
 
-if($_SESSION == [])
-    session_start();
-
-    
 function registerOrder($order) {
-    require_once '../../db/OrderRepository.php';
+    require_once '../db/OrderRepository.php';
+    session_start();
 
     $error = 0;
     foreach ($order as $key => $value) {
@@ -13,6 +10,8 @@ function registerOrder($order) {
             $error = 1;
         }
     }
+
+    echo "test";
 
     if (!isset($order['agreeTerms'])) {
         $error = 1;
@@ -26,6 +25,7 @@ function registerOrder($order) {
         echo "<script>history.back();</script>";
         exit();
     }
+
     
     $order['number'] = strval(date("YmdHms"));
     $products = array();
@@ -46,11 +46,11 @@ function registerOrder($order) {
     unset($_SESSION['cart']);
     unset($_SESSION['cart_value']);
 
-    header('location: ../../views/logged.php');
+    header('location: ../views/logged.php');
 }
 
 function acceptRejectOrder($data) {
-    require_once '../../db/OrderRepository.php';
+    require_once '../db/OrderRepository.php';
     
     $error = 0;
     foreach ($data as $key => $value) {
@@ -81,7 +81,7 @@ function acceptRejectOrder($data) {
         changeOrderStatus($data['number'], $decision);
     }
 
-    header('location: ../../views/logged.php');
+    header('location: ../views/logged.php');
 }
 
 function getOneOrder($orderNumber) {

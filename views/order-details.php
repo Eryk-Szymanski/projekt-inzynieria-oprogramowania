@@ -1,5 +1,7 @@
 <?php
   session_start();
+  require_once('../controllers/OrderController.php');
+  require_once('../controllers/ProductController.php');
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -17,7 +19,7 @@
 
             require_once './components/menu.php';
 
-            require_once '../controllers/OrderController/get-order.php';
+            $order = OrderController::getOrder($_GET['number']);
             if ($order) {
               echo <<< INFO
                 <h3 class="p-4 m-0 bg-primary bg-gradient rounded">Numer: $order[number]</h3>
@@ -55,7 +57,7 @@
                 <h3 class="px-4">Produkty:</h3>
 INFO;
               $productsJson = json_decode($order['products'], false);
-              require_once '../controllers/ProductController/get-order-products.php';
+              $products = ProductController::getOrderProducts($productsJson);
               echo "<div class='m-2 d-flex flex-wrap flex-column flex-lg-row'>";
               foreach ($products as $product) {
                 echo <<<INFO
@@ -72,15 +74,15 @@ INFO;
                 if($_SESSION['user_role'] == 'employee' && $order['status'] == 0) {
                   echo <<< OPTIONS
                   <div class="d-flex flex-column flex-lg-row w-100 justify-content-center">
-                    <form action="../controllers/OrderController/accept-order.php" method="post" class="col col-lg-4 mx-4 my-1">
+                    <form action="../controllers/handleForm.php" method="post" class="col col-lg-4 mx-4 my-1">
                       <input type="text" value="accept" hidden="true" name="decision" />
                       <input type="text" value="$_GET[number]" hidden="true" name="number" />
-                      <button type="submit" class="w-100 btn btn-success">Zaakceptuj</button>
+                      <button type="submit" class="w-100 btn btn-success" name="acceptOrder">Zaakceptuj</button>
                     </form>
-                    <form action="../controllers/OrderController/accept-order.php" method="post" class="col col-lg-4 mx-4 my-1">
+                    <form action="../controllers/handleForm.php" method="post" class="col col-lg-4 mx-4 my-1">
                       <input type="text" value="reject" hidden="true" name="decision" />
                       <input type="text" value="$_GET[number]" hidden="true" name="number" />
-                      <button type="submit" class="w-100 btn btn-danger">Odrzuć</button>
+                      <button type="submit" class="w-100 btn btn-danger" name="rejectOrder">Odrzuć</button>
                     </form>
                   </div>
 OPTIONS;

@@ -1,7 +1,8 @@
 <?php
   session_start();
-  require_once '../db/connect.php';
   require_once('../controllers/AccountController.php');
+  require_once('../controllers/OrderController.php');
+  require_once('../controllers/ProductController.php');
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -20,7 +21,7 @@
         <div class="col col-lg-6 p-4 mx-1 my-4 bg-warning bg-gradient rounded d-flex flex-column">
           <h3 class="px-4 py-2">Nowe zamówienie</h3>
 
-          <form action="../controllers/OrderController/new-order.php" method="post" class="w-100">
+          <form action="../controllers/handleForm.php" method="post" class="w-100">
             <?php
             
               $user = AccountController::getUser($_SESSION['user_id']);
@@ -47,7 +48,7 @@
 USER_DATA;
 
 // Metoda płatności
-              require_once('../controllers/OrderController/get-payment-methods.php');
+              $payment_methods = OrderController::getPaymentMethods();
               echo "<div class='d-flex flex-column flex-lg-row'>";
               echo "<div class='col col-lg-6 p-4 border-top border-white'>";
               echo "<h5>Wybierz metodę płatności:</h5>";
@@ -63,7 +64,7 @@ PAYMENT_METHOD;
               }
               echo "</div>";
 // Sposób dostawy  
-              require_once('../controllers/OrderController/get-delivery-methods.php');
+              $delivery_methods = OrderController::getDeliveryMethods();
               echo "<div class='col col-lg-6 p-4 border-top border-white'>";
               echo "<h5>Wybierz sposób dostawy:</h5>";
               foreach($delivery_methods as $delivery_method) {
@@ -93,7 +94,7 @@ DELIVERY_METHOD;
                 </label>
               </div>
 
-              <button type="submit" class="col col-lg-6 btn btn-primary m-2">Zamów</button>
+              <button type="submit" class="col col-lg-6 btn btn-primary m-2" name="newOrder">Zamów</button>
             </div>
           </form>
           <br>
@@ -109,7 +110,7 @@ DELIVERY_METHOD;
               $test = json_encode($products);
               $productsJson = json_decode($test);
               $cart_value = 0;
-              require_once '../controllers/ProductController/get-order-products.php';
+              $products = ProductController::getOrderProducts($productsJson);
               foreach($products as $product) {
                 $cart_value += $product['final_price'];
                 echo <<< INFO

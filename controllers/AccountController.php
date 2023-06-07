@@ -8,6 +8,14 @@
             loginUser($email);
         }
 
+        public static function logout() {
+            logoutUser();
+        }
+        
+        public static function register($data) {
+            registerUser($data);
+        }
+
         public static function getUser($user_id) {
             return getUserData($user_id);  
         }

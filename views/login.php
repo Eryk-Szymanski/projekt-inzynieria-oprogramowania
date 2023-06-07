@@ -42,12 +42,12 @@ INFO;
         <h1><a href="./" class="text-decoration-none fw-bolder">Candy Shop</a></h1>
         <h3 class="p-2">Logowanie</h3>
 
-        <form action="../controllers/AccountController/login.php" method="post" class="d-flex flex-column p-2 border-top border-white">
+        <form action="../controllers/handleForm.php" method="post" class="d-flex flex-column p-2 border-top border-white">
           <label for="email">Email</label>
           <input type="email" class="form-control" id="email" name="email">
           <label for="pass">Hasło</label>
           <input type="password" class="form-control" id="pass" name="pass">
-          <button type="submit" class="btn btn-primary my-4 w-100">Zaloguj</button>
+          <button type="submit" class="btn btn-primary my-4 w-100" name="login">Zaloguj</button>
         </form>
 
         <div class="d-flex flex-column flex-lg-row fs-5">

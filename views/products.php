@@ -1,5 +1,6 @@
 <?php
   session_start();
+  require_once('../controllers/ProductController.php');
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -15,7 +16,8 @@
       <div class="d-flex flex-column text-center">
         <h3 class="mt-4 pt-4">Wszystkie produkty</h3>
         <?php if (isset($_SESSION['success'])) 
-          require_once('../controllers/ProductController/get-products.php');
+        
+          $products = ProductController::getProducts();
           
           if(count($products)) {
             echo "<div class='d-flex flex-wrap flex-column flex-lg-row justify-content-center'>";
@@ -25,11 +27,11 @@
                   <div class="col col-lg-4 bg-info p-4 m-4 rounded ">
                   <a href='./product-details.php?product_id=$product[id]' class='text-decoration-none'><h3>$product[name]</h3></a>
                   <h3>$product[price] zł</h3>
-                  <form action="../controllers/ProductController/add-to-cart.php" method="post" class="d-flex flex-column flex-lg-row align-items-center">
+                  <form action="../controllers/handleForm.php" method="post" class="d-flex flex-column flex-lg-row align-items-center">
                       <input type="number" value="$product[id]" hidden="true" name="product_id" />
                       <label for="quantity" class="fs-3">Ilość</label>
                       <input type="number" class="form-control m-4 w-25" value="1" name="quantity"/>
-                      <button type="submit" class="btn btn-primary m-4">Dodaj do koszyka</button>
+                      <button type="submit" class="btn btn-primary m-4" name="addToCart">Dodaj do koszyka</button>
                   </form>
                   </div>
 INFO;

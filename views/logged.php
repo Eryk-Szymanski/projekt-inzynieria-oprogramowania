@@ -1,5 +1,6 @@
 <?php
   session_start();
+  require_once('../controllers/OrderController.php');
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -17,7 +18,7 @@
 
           require_once '../db/connect.php';
           if ($_SESSION['user_role'] == 'user') {
-            require_once('../controllers/OrderController/get-user-orders.php');
+            $orders = OrderController::getUserOrders($_SESSION['user_id']);
             echo <<< USERORDERS
             <div class="col col-lg-6 d-flex flex-column p-4 m-4">
               <h3 class="bg-primary bg-gradient p-4 my-4 rounded w-100">Twoje zamówienia</h3>
@@ -33,13 +34,17 @@ USERORDERS;
             echo "</ul></div>";
           }
           elseif ($_SESSION['user_role'] == 'employee' || $_SESSION['user_role'] == 'admin') {
-            require_once('../controllers/OrderController/get-orders-by-status.php');
             echo <<< NEWORDERS
             <div class="col col-lg-3 d-flex flex-column p-4 m-2">
               <h3 class="bg-primary bg-gradient p-4 my-4 rounded w-100">Nowe zamówienia</h3>
 NEWORDERS;
-              foreach ($orders0 as $order) {
-                echo "<a href='./order-details.php?number=$order[number]' class='text-reset text-decoration-none fs-5 fw-bolder w-100 p-4 my-2 rounded border border-primary'>$order[number]</a>";
+              $orders = OrderController::getOrdersByStatus(0);
+              if($orders) {
+                foreach ($orders as $order) {
+                  echo "<a href='./order-details.php?number=$order[number]' class='text-reset text-decoration-none fs-5 fw-bolder w-100 p-4 my-2 rounded border border-primary'>$order[number]</a>";
+                }
+              } else {
+                echo "<h5>Brak zamówień</h5>";
               }
             echo "</div>";
 
@@ -47,18 +52,28 @@ NEWORDERS;
             <div class="col col-lg-3 d-flex flex-column p-4 m-2">
               <h3 class="bg-success bg-gradient p-4 my-4 rounded w-100">Zaakceptowane</h3>
 ACCEPTEDORDERS;
-            foreach ($orders1 as $order) {
-              echo "<a href='./order-details.php?number=$order[number]' class='text-reset text-decoration-none fs-5 fw-bolder w-100 p-4 my-2 rounded border border-success'>$order[number]</a>";
-            }
+              $orders = OrderController::getOrdersByStatus(1);
+              if($orders) {
+                foreach ($orders as $order) {
+                  echo "<a href='./order-details.php?number=$order[number]' class='text-reset text-decoration-none fs-5 fw-bolder w-100 p-4 my-2 rounded border border-success'>$order[number]</a>";
+                }
+              } else {
+                echo "<h5>Brak zamówień</h5>";
+              }
             echo "</div>";
 
             echo <<< REJECTEDORDERS
             <div class="col col-lg-3 d-flex flex-column p-4 m-2">
               <h3 class="bg-danger bg-gradient p-4 my-4 rounded w-100">Odrzucone</h3>
 REJECTEDORDERS;
-            foreach ($orders2 as $order) {
-              echo "<a href='./order-details.php?number=$order[number]' class='text-reset text-decoration-none fs-5 fw-bolder w-100 p-4 my-2 rounded border border-danger'>$order[number]</a>";
-            }
+              $orders = OrderController::getOrdersByStatus(2);
+              if($orders) {
+                foreach ($orders as $order) {
+                  echo "<a href='./order-details.php?number=$order[number]' class='text-reset text-decoration-none fs-5 fw-bolder w-100 p-4 my-2 rounded border border-danger'>$order[number]</a>";
+                }
+              } else {
+                echo "<h5>Brak zamówień</h5>";
+              }
             echo "</div>";
           }
         }

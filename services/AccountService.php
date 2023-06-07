@@ -3,7 +3,7 @@
 function loginUser(string $email) {
     session_start();
 
-    require_once '../../db/AccountRepository.php';
+    require_once '../db/AccountRepository.php';
 
     $error = 0;
     if (empty($email))
@@ -27,17 +27,17 @@ function loginUser(string $email) {
         $_SESSION['user_role'] = $user['role'];
         $_SESSION['user_name'] = $user['name'];
         $_SESSION['user_id'] = $user['id'];
-        header('location: ../../views/logged.php');
+        header('location: ../views/logged.php');
         exit();
     } else {
         $_SESSION['error'] = "Nie zalogowano użytkownika $_POST[email]";
     }
 
-    header('location: ../../');
+    header('location: ../');
 }
 
 function registerUser($user) {
-    require_once '../../db/AccountRepository.php';
+    require_once '../db/AccountRepository.php';
 
     $error = 0;
     foreach ($user as $key => $value) {
@@ -59,7 +59,7 @@ function registerUser($user) {
     if(isset($result['error']))
         $_SESSION['error'] = $result['error'];
 
-    header('location: ../../');
+    header('location: ../');
 }
 
 function logoutUser() {
@@ -75,7 +75,7 @@ function logoutUser() {
 
     session_destroy();
 
-    header('location: ../../');
+    header('location: ../');
 }
 
 function getUserData($user_id) {

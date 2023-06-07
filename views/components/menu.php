@@ -31,8 +31,8 @@
                 ?>
                 <a href="./new-order.php"><i class="bi bi-basket3 fs-2 text-light"></i></a>
                 
-                <form action="../controllers/AccountController/logout.php" method="post">
-                    <button type="submit" class="mx-4 px-4 btn btn-danger">Wyloguj</button>
+                <form action="../controllers/handleForm.php" method="post">
+                    <button type="submit" class="mx-4 px-4 btn btn-danger" name="logout">Wyloguj</button>
                 </form>
             </div>
         </div>
