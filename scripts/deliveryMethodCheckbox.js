@@ -18,7 +18,7 @@ const checkboxOnClick = (checkbox) => {
   date.setDate(date.getDate() + +checkbox.getAttribute("days"));
   console.log(date);
   deliveryDate.innerHTML =
-    "Przewidywany termin dostawy" +
+    "Przewidywany termin dostawy: " +
     date.getFullYear() +
     "-" +
     (+date.getMonth() + 1) +

@@ -25,6 +25,7 @@
                 <h3 class="p-4 m-0 bg-primary bg-gradient rounded">Numer: $order[number]</h3>
                 <br>
                 <h5 class="px-4">Utworzono: $order[created_at]</h5>
+                <h5 class="px-4">Status: $order[status]</h5>
                 <div class="d-flex flex-column flex-lg-row">
                   <div class="col col-lg-6 p-4 border-top border-white">
                     <h3>Dane</h3>
@@ -75,7 +76,7 @@ INFO;
                 }
               echo "</div>";
               if (isset($_SESSION['user_role'])) {
-                if($_SESSION['user_role'] == 'employee' && $order['status'] == 0) {
+                if($_SESSION['user_role'] == 'employee' && $order['status_id'] == 1) {
                   echo <<< OPTIONS
                   <div class="d-flex flex-column flex-lg-row w-100 justify-content-center">
                     <form action="../controllers/handleForm.php" method="post" class="col col-lg-4 mx-4 my-1">

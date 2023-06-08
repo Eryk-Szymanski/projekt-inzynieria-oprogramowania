@@ -11,31 +11,6 @@
   </head>
   <body>
     <div class="container-fluid w-100 bg-dark screen-height d-flex justify-content-center align-items-center">
-      <?php
-        if (isset($_SESSION['success'])) {
-          echo <<< INFO
-            <div class="position-absolute">
-              <h3>Komunikat</h3>
-              <div>
-                $_SESSION[success]
-              </div>
-            </div>
-INFO;
-          unset($_SESSION['success']);
-        }
-
-        if (isset($_SESSION['error'])) {
-          echo <<< INFO
-            <div class="position-absolute">
-              <h3>Error</h3>
-              <div>
-                $_SESSION[error]
-              </div>
-            </div>
-INFO;
-          unset($_SESSION['error']);
-        } 
-      ?>
       <div class="col col-lg-3 bg-warning bg-gradient rounded d-flex flex-column justify-content-center align-items-center">
 
         <img src="../images/logo.png" class="image-medium"/>

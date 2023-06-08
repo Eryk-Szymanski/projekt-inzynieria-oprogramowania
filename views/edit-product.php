@@ -18,7 +18,7 @@
         $product = ProductController::getProductDetails($_GET['product_id']); 
         $img = "";
         if($product['image_path'])
-            $img = "<img src='$product[image_path]' class='image-medium' />";
+            $img = "<img src='$product[image_path]' class='image-medium my-2' />";
         $checked = "";
         if($product['is_available'])
             $checked = "checked";
@@ -44,9 +44,10 @@
             <input type="number" class="form-control" id="calories" name="calories" value="$product[calories]"/>
             <label for="price">Cena</label>
             <input type="number" class="form-control" id="price" name="price" value="$product[price]"/>
-            <label for="photo">Zdjęcie</label>
             $img
-            <input type="file" name="photo" id="photo">
+            <br>
+            <label for="photo">Zdjęcie</label>
+            <input type="file" class="form-control" name="photo" id="photo">
             <button type="submit" class="btn btn-primary my-4 w-100" name="editProduct">Edytuj produkt</button>
           </form>
         </div>

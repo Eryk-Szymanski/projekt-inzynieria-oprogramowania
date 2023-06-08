@@ -25,21 +25,32 @@
                     $available = "<i class='bi bi-check-square-fill text-success mx-2'></i>Dostępny";
                 $img = "";
                 if($product['image_path'])
-                  $img = "<img src='$product[image_path]' class='image-medium' />";
-              echo <<< INFO
-                $img
-                <a href="./edit-product.php?product_id=$product[id]" class='text-decoration-none'><h5>Edytuj <i class="bi bi-pencil-fill"></i></h5></a>
-                <form action="../controllers/handleForm.php" method="post" class="col col-lg-4 mx-4 my-1">
-                  <input type="number" value="$product[id]" hidden="true" name="product_id" />
-                  <button type="submit" class="w-100 btn btn-danger" name="deleteProduct"><i class="bi bi-trash3-fill"></i> Usuń</button>
-                </form>
-                <h3>Detale produktu</h3>
-                <h1>$product[name]</h1>
-                <h5>Waga: $product[weight]</h5>
-                <h5>$available</h5>
-                <h5>Opis: $product[description]</h5>
-                <h5>Kalorie: $product[calories]</h5>
-                <h5>Cena: $product[price] zł</h5>
+                  $img = "<img src='$product[image_path]' class='image-medium col-lg-4' />";
+                
+                if ($_SESSION['user_role'] == 'employee') {
+                  echo <<< EMPLOYEE_OPTIONS
+                    <div class="d-flex flex-column flex-lg-row justify-content-center my-2">
+                      <a href='./edit-product.php?product_id=$product[id]' class='col col-lg-4 btn btn-primary text-decoration-none mx-2 my-1'><i class='bi bi-pencil-fill'></i> Edytuj</a>
+                      <form action="../controllers/handleForm.php" method="post" class="col col-lg-4 mx-2 my-1">
+                        <input type="number" value="$product[id]" hidden="true" name="product_id" />
+                        <button type="submit" class="w-100 btn btn-danger" name="deleteProduct"><i class="bi bi-trash3-fill"></i> Usuń</button>
+                      </form>
+                    </div>
+EMPLOYEE_OPTIONS;
+                }
+                echo <<< INFO
+                  <div class="d-flex flex-column flex-lg-row my-2">
+                    $img
+                    <div class="m-4">
+                      <h3>Detale produktu</h3>
+                      <h1>$product[name]</h1>
+                      <h5>Waga: $product[weight]</h5>
+                      <h5>$available</h5>
+                      <h5>Opis: $product[description]</h5>
+                      <h5>Kalorie: $product[calories]</h5>
+                      <h5>Cena: $product[price] zł</h5> 
+                    </div>
+                  </div>
 INFO;
             } else {
               echo "<h3>Nie udało się pobrać detali produktu</h3>";

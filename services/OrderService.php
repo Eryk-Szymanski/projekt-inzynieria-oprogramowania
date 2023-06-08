@@ -11,8 +11,6 @@ function registerOrder($order) {
         }
     }
 
-    echo "test";
-
     if (!isset($order['agreeTerms'])) {
         $error = 1;
     }
@@ -38,6 +36,7 @@ function registerOrder($order) {
 
     $result = createOrder($order);
     if(isset($result['error'])) {
+        echo $result['error'];
         $_SESSION['error'] = $result['error'];
         header('location: ../');
         exit();
@@ -72,10 +71,10 @@ function acceptRejectOrder($data) {
         $decision = 0;
         switch($_POST['decision']) {
             case 'accept':
-                $decision = 1;
+                $decision = 2;
                 break;
             case 'reject':
-                $decision = 2;
+                $decision = 3;
                 break;
         }
         changeOrderStatus($data['number'], $decision);

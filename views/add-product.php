@@ -36,7 +36,7 @@
               <label for="price">Cena</label>
               <input type="number" class="form-control" id="price" name="price" />
               <label for="photo">Zdjęcie</label>
-              <input type="file" name="photo" id="photo">
+              <input type="file" class="form-control" name="photo" id="photo">
               <button type="submit" class="btn btn-primary my-4 w-100" name="addProduct">Dodaj produkt</button>
           </form>
         </div>

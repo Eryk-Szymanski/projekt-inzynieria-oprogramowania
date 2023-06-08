@@ -5,8 +5,9 @@ function createOrder($order) {
 
     $error = 0;
     try {
-        $stmt = $mysqli->prepare("INSERT INTO `orders` (`number`, `user_id`, `products`, `payment_method_id`, `delivery_method_id`, `delivery_address_id`, `total_price`, `comments`) VALUES (?, ?, ?, ?, ?, ?, ?, ?);");
-        $stmt->bind_param("sisiiids", $order['number'], $order['user_id'], $order['products'], $order['paymentMethod'], $order['deliveryMethod'], $order['address_id'], $order['cart_value'], $order['comments']);
+        $status_id = 1;
+        $stmt = $mysqli->prepare("INSERT INTO `orders` (`number`, `user_id`, `products`, `payment_method_id`, `delivery_method_id`, `delivery_address_id`, `total_price`, `comments`, `status_id`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);");
+        $stmt->bind_param("sisiiidsi", $order['number'], $order['user_id'], $order['products'], $order['paymentMethod'], $order['deliveryMethod'], $order['address_id'], $order['cart_value'], $order['comments'], $status_id);
         $stmt->execute();
 
         if ($stmt->affected_rows == 1) {
@@ -27,7 +28,7 @@ function changeOrderStatus($orderNumber, $decision) {
 
     $error = 0;
     try {
-        $stmt = $mysqli->prepare("UPDATE orders SET status = ? WHERE number = $orderNumber");
+        $stmt = $mysqli->prepare("UPDATE orders SET status_id = ? WHERE number = $orderNumber");
         $stmt->bind_param("i", $decision);
         $stmt->execute();
     
@@ -60,7 +61,8 @@ function getOrder($orderNumber) {
             addresses.street, 
             addresses.apartment,
             payment_methods.name as payment,
-            delivery_methods.*
+            delivery_methods.*,
+            order_statuses.name as status
             FROM `orders` 
             JOIN `users` 
             ON users.id = orders.user_id 
@@ -70,6 +72,8 @@ function getOrder($orderNumber) {
             ON payment_methods.id = orders.payment_method_id 
             JOIN `delivery_methods` 
             ON delivery_methods.id = orders.delivery_method_id 
+            JOIN `order_statuses` 
+            ON order_statuses.id = orders.status_id 
             WHERE orders.number = $orderNumber";
         $result = $mysqli->query($sql);
         $order = $result->fetch_assoc();
@@ -142,7 +146,7 @@ function getUserOrders($user_id) {
 
     $error = 0;
     try {
-        $sql = "SELECT orders.number FROM `orders` WHERE `user_id` = $user_id";
+        $sql = "SELECT number, status_id FROM `orders` WHERE `user_id` = $user_id";
         $result = $mysqli->query($sql);
         $rows = [];
         while($row = $result->fetch_assoc()) {
@@ -162,12 +166,12 @@ function getUserOrders($user_id) {
     return ["error" => $error];
 }
 
-function getOrdersByStatus($status) {
+function getOrdersByStatus($status_id) {
     $mysqli = new mysqli("localhost", "root", "", "inzynieria-oprogramowania-db");
 
     $error = 0;
     try {
-        $sql = "SELECT orders.number FROM `orders` WHERE `status` = $status";
+        $sql = "SELECT orders.number FROM `orders` WHERE `status_id` = $status_id";
         $result = $mysqli->query($sql);
         $rows = [];
         while($row = $result->fetch_assoc()) {
