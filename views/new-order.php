@@ -16,7 +16,7 @@
   </head>
   <body>
     <div class="container-fluid w-100 bg-dark screen-height d-flex justify-content-center text-light menu-buffer py-4">
-      <?php if (isset($_SESSION['success'])) : ?>
+      <?php if (isset($_SESSION['user_id'])) : ?>
         <?php require_once './components/menu.php'; ?>
         <div class="col col-lg-6 p-4 mx-1 my-4 bg-warning bg-gradient rounded d-flex flex-column">
           <h3 class="px-4 py-2">Nowe zamówienie</h3>

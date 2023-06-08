@@ -11,7 +11,7 @@
   </head>
   <body>
     <div class="container-fluid w-100 bg-dark screen-height d-flex justify-content-center align-items-center text-light menu-buffer">
-      <?php if (isset($_SESSION['success'])) : ?>
+      <?php if (isset($_SESSION['user_id'])) : ?>
 
         <?php require_once './components/menu.php'; ?>
         

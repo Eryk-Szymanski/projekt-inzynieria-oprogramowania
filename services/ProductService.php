@@ -18,7 +18,8 @@ function addProduct($product) {
     $result = createProduct($product);
     if(isset($result['error']))
         $_SESSION['error'] = $result['error'];
-
+    
+    $_SESSION['success'] = "Prawidłowo dodano produkt";
     header('location: ../views/products.php');
 }
 
@@ -40,7 +41,8 @@ function updateProduct($product) {
     $result = changeProduct($product);
     if(isset($result['error']))
         $_SESSION['error'] = $result['error'];
-
+    
+    $_SESSION['success'] = "Prawidłowo zaktualizowano produkt";
     header('location: ../views/products.php');
 }
 
@@ -60,8 +62,13 @@ function removeProduct($product_id) {
     $result = deleteProduct($product_id);
     if(isset($result['error']))
         $_SESSION['error'] = $result['error'];
+    else {
+        $_SESSION['success'] = "Prawidłowo usunięto produkt";
+        header('location: ../views/products.php');
+        exit();
+    }
 
-    header('location: ../views/products.php');
+    header('location: ../');
 }
 
 function getProductsAll() {

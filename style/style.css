@@ -22,3 +22,10 @@ body {
   background-color: #111111;
   color: #999999;
 }
+
+.info-message {
+  position: absolute;
+  transition: 1s;
+  top: -300px;
+  right: 0px;
+}

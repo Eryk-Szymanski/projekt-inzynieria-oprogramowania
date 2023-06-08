@@ -11,11 +11,17 @@
     <?php require_once '../style/links.php'; ?>
   </head>
   <body>
-    <?php require_once './components/menu.php'; ?>
+    <?php 
+      require_once './components/menu.php'; 
+      if ($_SESSION['success'] != "") {
+        echo "<h5 class='p-4 m-4 bg-primary rounded text-white info-message' id='info'>$_SESSION[success]</h5>";
+        $_SESSION['success'] = "";
+      }    
+    ?>
     <div class="container-fluid w-100 bg-dark screen-height text-light menu-buffer">
       <div class="d-flex flex-column text-center py-4 px-lg-4">
         <h3 class="mt-4 pt-4">Wszystkie produkty</h3>
-        <?php if (isset($_SESSION['success'])) 
+        <?php if (isset($_SESSION['user_id'])) 
         
           $products = ProductController::getProducts();
           
@@ -56,5 +62,6 @@ INFO;
       </div>
     </div>
     <?php require_once('./components/footer.php'); ?>
+    <script src="../scripts/displayInfoMessage.js"></script>
   </body>
 </html>

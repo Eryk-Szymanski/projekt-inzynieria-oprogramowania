@@ -14,7 +14,7 @@
     <?php require_once './components/menu.php'; ?>
     <div class="container-fluid w-100 bg-dark screen-height d-flex flex-column flex-lg-row justify-content-center text-light menu-buffer">
         <?php
-            if (isset($_SESSION['success'])) {
+            if (isset($_SESSION['user_id'])) {
             echo <<< USERS
             <div class="col col-lg-6 d-flex flex-column p-4 m-4">
                 <h3 class="bg-primary bg-gradient p-4 my-4 rounded w-100">Użytkownicy</h3>
