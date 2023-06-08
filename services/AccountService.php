@@ -55,9 +55,13 @@ function registerUser($user) {
 
     $user['hash'] = password_hash($user['pass1'], PASSWORD_ARGON2ID); 
     
+    session_start();
+
     $result = createUser($user);
     if(isset($result['error']))
         $_SESSION['error'] = $result['error'];
+    else
+        $_SESSION['success'] = "Prawidłowo zarejestrowano użytkownika";
 
     header('location: ../');
 }

@@ -18,7 +18,7 @@
         $product = ProductController::getProductDetails($_GET['product_id']); 
         $img = "";
         if($product['image_path'])
-            $img = "<img src='$product[image_path]' class='image-medium my-2' />";
+            $img = "<img src='$product[image_path]' class='image-medium my-2 rounded' />";
         $checked = "";
         if($product['is_available'])
             $checked = "checked";

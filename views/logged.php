@@ -15,7 +15,7 @@
       require_once './components/menu.php'; 
       if (isset($_SESSION['success'])) {
         echo "<h5 class='p-4 m-4 bg-primary rounded text-white info-message' id='info'>$_SESSION[success]</h5>";
-        $_SESSION['success'] = "";
+        unset($_SESSION['success']);
       }  
     ?>
     <div class="container-fluid w-100 bg-dark screen-height d-flex flex-column flex-lg-row justify-content-center text-light menu-buffer">

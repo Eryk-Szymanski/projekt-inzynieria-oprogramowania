@@ -61,19 +61,27 @@ INFO;
               $products = ProductController::getOrderProducts($productsJson);
               echo "<div class='m-2 d-flex flex-wrap flex-column flex-lg-row'>";
               foreach ($products as $product) {
-                $img = "";
-                if($product['image_path'])
-                  $img = "<img src='$product[image_path]' class='image-medium' />";
-                echo <<<INFO
-                <div class="p-4 m-2 bg-info bg-gradient d-flex flex-column rounded">
-                  $img
-                  <h5>Nazwa: <a href='./product-details.php?product_id=$product[id]' class='text-decoration-none'>$product[name]</a></h5>
-                  <h5>Ilość: $product[quantity]</h5>
-                  <h5>Cena za sztukę: $product[price] zł</h5>
-                  <h5>Cena końcowa: $product[final_price] zł</h5>
-                </div>
+                if(isset($product['name'])) {
+                  $img = "";
+                  if($product['image_path'])
+                    $img = "<img src='$product[image_path]' class='image-medium rounded mb-4' />";
+                  echo <<<INFO
+                    <div class="p-4 m-2 bg-dark bg-gradient border border-primary d-flex flex-column rounded">
+                      $img
+                      <h5>Nazwa: <a href='./product-details.php?product_id=$product[id]' class='text-decoration-none'>$product[name]</a></h5>
+                      <h5>Ilość: $product[quantity]</h5>
+                      <h5>Cena za sztukę: $product[price] zł</h5>
+                      <h5>Cena końcowa: $product[final_price] zł</h5>
+                    </div>
+INFO;
+                } else {
+                  echo <<<INFO
+                    <div class="p-4 m-2 bg-info bg-gradient d-flex flex-column rounded">
+                      Produkt został usunięty
+                    </div>
 INFO;
                 }
+              }
               echo "</div>";
               if (isset($_SESSION['user_role'])) {
                 if($_SESSION['user_role'] == 'employee' && $order['status_id'] == 1) {

@@ -115,9 +115,9 @@ DELIVERY_METHOD;
                 $cart_value += $product['final_price'];
                 $img = "";
                 if($product['image_path'])
-                  $img = "<img src='$product[image_path]' class='image-medium' />";
+                  $img = "<img src='$product[image_path]' class='image-medium rounded mb-4' />";
                 echo <<< PRODUCT
-                  <div class='p-4 m-2 bg-info bg-gradient d-flex flex-column rounded'>
+                  <div class='p-4 m-2 bg-dark bg-gradient border border-primary d-flex flex-column rounded'>
                     $img
                     <h5>Nazwa: <a href='./product-details.php?product_id=$product[id]' class='text-decoration-none'>$product[name]</a></h5>
                     <h5>Ilość: $product[quantity]</h5>

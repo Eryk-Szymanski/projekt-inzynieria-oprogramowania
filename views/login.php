@@ -10,6 +10,12 @@
     <?php require_once '../style/links.php'; ?>
   </head>
   <body>
+    <?php
+      if (isset($_SESSION['success'])) {
+        echo "<h5 class='p-4 m-4 bg-primary rounded text-white info-message' id='info'>$_SESSION[success]</h5>";
+        unset($_SESSION['success']);
+      } 
+    ?>
     <div class="container-fluid w-100 bg-dark screen-height d-flex justify-content-center align-items-center">
       <div class="col col-lg-3 bg-warning bg-gradient rounded d-flex flex-column justify-content-center align-items-center">
 
@@ -33,5 +39,6 @@
       </div>
     </div>
     <?php require_once('./components/footer.php'); ?>
+    <script src="../scripts/displayInfoMessage.js"></script>
   </body>
 </html>

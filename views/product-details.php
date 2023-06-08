@@ -12,7 +12,7 @@
   </head>
   <body>
     <div class="container-fluid w-100 bg-dark screen-height d-flex justify-content-center align-items-center text-light menu-buffer py-4">
-      <div class="col col-lg-6 bg-info bg-gradient rounded d-flex flex-column justify-content-center mx-1 my-4 p-4">
+      <div class="col col-lg-6 bg-dark bg-gradient border border-primary rounded d-flex flex-column justify-content-center mx-1 my-4 p-4">
         <?php if (isset($_SESSION['user_id'])) : ?>
           <?php
 
@@ -25,7 +25,7 @@
                     $available = "<i class='bi bi-check-square-fill text-success mx-2'></i>Dostępny";
                 $img = "";
                 if($product['image_path'])
-                  $img = "<img src='$product[image_path]' class='image-medium col-lg-4' />";
+                  $img = "<img src='$product[image_path]' class='image-medium col-lg-4 rounded' />";
                 
                 if ($_SESSION['user_role'] == 'employee') {
                   echo <<< EMPLOYEE_OPTIONS

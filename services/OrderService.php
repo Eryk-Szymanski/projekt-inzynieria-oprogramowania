@@ -2,7 +2,6 @@
 
 function registerOrder($order) {
     require_once '../db/OrderRepository.php';
-    session_start();
 
     $error = 0;
     foreach ($order as $key => $value) {
@@ -15,6 +14,8 @@ function registerOrder($order) {
         $error = 1;
     }
 
+    session_start();
+
     if(!isset($_SESSION['cart'])) {
         $error = 1;
     }
@@ -23,7 +24,6 @@ function registerOrder($order) {
         echo "<script>history.back();</script>";
         exit();
     }
-
     
     $order['number'] = strval(date("YmdHms"));
     $products = array();
@@ -40,10 +40,11 @@ function registerOrder($order) {
         $_SESSION['error'] = $result['error'];
         header('location: ../');
         exit();
-    } 
-
-    unset($_SESSION['cart']);
-    unset($_SESSION['cart_value']);
+    } else {
+        unset($_SESSION['cart']);
+        unset($_SESSION['cart_value']);
+        $_SESSION['success'] = "Prawidłowo utworzono zamówienie";
+    }
 
     header('location: ../views/logged.php');
 }
@@ -67,6 +68,8 @@ function acceptRejectOrder($data) {
         exit();
     }
 
+    session_start();
+
     if(isset($data['decision'])) {
         $decision = 0;
         switch($_POST['decision']) {
@@ -77,7 +80,15 @@ function acceptRejectOrder($data) {
                 $decision = 3;
                 break;
         }
-        changeOrderStatus($data['number'], $decision);
+        $result = changeOrderStatus($data['number'], $decision);
+        if(isset($result['error'])) {
+            echo $result['error'];
+            $_SESSION['error'] = $result['error'];
+            header('location: ../');
+            exit();
+        } else {
+            $_SESSION['success'] = "Prawidłowo zmieniono status zamówienia";
+        }
     }
 
     header('location: ../views/logged.php');

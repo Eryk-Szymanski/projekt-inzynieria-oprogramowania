@@ -15,11 +15,13 @@ function addProduct($product) {
         exit();
     }
 
+    session_start();
     $result = createProduct($product);
     if(isset($result['error']))
         $_SESSION['error'] = $result['error'];
-    
-    $_SESSION['success'] = "Prawidłowo dodano produkt";
+    else
+        $_SESSION['success'] = "Prawidłowo dodano produkt";
+
     header('location: ../views/products.php');
 }
 
@@ -38,11 +40,13 @@ function updateProduct($product) {
         exit();
     }
 
+    session_start();
     $result = changeProduct($product);
     if(isset($result['error']))
         $_SESSION['error'] = $result['error'];
+    else
+        $_SESSION['success'] = "Prawidłowo zaktualizowano produkt";
     
-    $_SESSION['success'] = "Prawidłowo zaktualizowano produkt";
     header('location: ../views/products.php');
 }
 
@@ -59,6 +63,7 @@ function removeProduct($product_id) {
         exit();
     }
 
+    session_start();
     $result = deleteProduct($product_id);
     if(isset($result['error']))
         $_SESSION['error'] = $result['error'];
@@ -97,7 +102,8 @@ function getOrderProducts($productsJson) {
         $result = getProduct($productJson->product_id);
         if(isset($result['success'])) {
             $result['product']['quantity'] = $productJson->quantity;
-            $result['product']['final_price'] = intval($productJson->quantity) * intval($result['product']['price']);
+            if(isset($result['product']['price'])) 
+                $result['product']['final_price'] = intval($productJson->quantity) * intval($result['product']['price']);
             array_push($products, $result['product']);
         }
     }
@@ -112,16 +118,16 @@ function addToCart($product) {
         }
     }
 
-    session_start();
-
     if($error == 1) {
         echo "<script>history.back();</script>";
         exit();
     }
+    
+    session_start();
 
     try {
         $_SESSION['cart'][$product['product_id']] = $product['quantity'];
-
+        $_SESSION['success'] = "Dodano produkt $product[name] do koszyka";
     } catch (Exception $e) {
         echo $e->getMessage();
         $_SESSION['error'] = "Nie dodano produktu";
