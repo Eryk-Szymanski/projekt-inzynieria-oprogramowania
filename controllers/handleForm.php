@@ -4,14 +4,16 @@
     require_once('./OrderController.php');
     require_once('./ProductController.php');
 
+    $accountController = AccountController::getInstance();
+
     if (isset($_POST['login'])){
         unset($_POST['login']);
-        AccountController::login($_POST['email']);
+        $accountController->login($_POST['email']);
     }
 
     if (isset($_POST['logout'])){
         unset($_POST['logout']);
-        AccountController::logout();
+        $accountController->logout();
     }
 
     if (isset($_POST['register'])){

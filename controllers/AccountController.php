@@ -1,15 +1,29 @@
 <?php
 
-    require_once '../services/AccountService.php';
+    include '../services/AccountService.php';
 
     class AccountController {
 
-        public static function login($email) {
-            loginUser($email);
+        private $service;
+        private static $instance;
+
+        private function __construct() {
+            $this->service = new AccountService();
         }
 
-        public static function logout() {
-            logoutUser();
+        public static function getInstance() {
+            if(!isset(self::$instance)) {
+                self::$instance = new AccountController();
+            }
+            return self::$instance;
+        }
+
+        public function login($email) {
+            $this->service->loginUser($email);
+        }
+
+        public function logout() {
+            $this->service->logoutUser();
         }
         
         public static function register($data) {
@@ -20,8 +34,8 @@
             return getUserData($user_id);  
         }
 
-        public static function getUsers() {
-            return getAllUsers();
+        public function getUsers() {
+            return $this->service->getAllUsers();
         }
 
         public static function getAddress($address_id) {
