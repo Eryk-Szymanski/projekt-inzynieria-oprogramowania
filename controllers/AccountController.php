@@ -19,21 +19,16 @@
             return self::$instance;
         }
 
-        public function login(string $email) {
-            $result = $this->service->login($email);
-            if($result)
-                return header('location: ../views/logged.php');
-            return header('location: ../');
+        public function login(string $email, string $pass) {
+            return $this->service->login($email, $pass);
         }
 
         public function logout() {
-            $this->service->logout();
-            return header('location: ../');
+            return $this->service->logout();
         }
         
         public function register($data) {
-            $this->service->register($data);
-            return header('location: ../');
+            return $this->service->register($data);
         }
 
         public function getUser(int $user_id) {

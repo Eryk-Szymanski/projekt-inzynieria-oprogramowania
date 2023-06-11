@@ -10,7 +10,7 @@
             $this->repository = new OrderRepository();
         }
 
-        public function newOrder($order) {
+        public function newOrder($order, $cart, $cart_value) {
 
             $error = 0;
             foreach ($order as $key => $value) {
@@ -21,9 +21,7 @@
             if (!isset($order['agreeTerms'])) 
                 $error = 1;
 
-            session_start();
-
-            if(!isset($_SESSION['cart'])) 
+            if(!$cart) 
                 $error = 1;
 
             if($error == 1) 
@@ -31,25 +29,18 @@
             
             $order['number'] = strval(date("YmdHms"));
             $products = array();
-            foreach($_SESSION['cart'] as $key => $value) {
+            foreach($cart as $key => $value) {
                 $product = array('product_id' => $key, 'quantity' => $value);
                 array_push($products, $product);
             }
             $order['products'] = json_encode($products);
-            $order['cart_value'] = $_SESSION['cart_value'];
+            $order['cart_value'] = $cart_value;
 
-            $result = $this->repository->createOrder($order);
-            if(isset($result['error'])) {
-                echo $result['error'];
-                $_SESSION['error'] = $result['error'];
-            } else {
-                unset($_SESSION['cart']);
-                unset($_SESSION['cart_value']);
-                $_SESSION['success'] = "Prawidłowo utworzono zamówienie";
-                return true;
-            }
+            $result = $this->repository->newOrder($order);
+            if(isset($result['success']))
+                return ["success" => "Prawidłowo utworzono zamówienie"];
 
-            return false;
+            return ["error" => $result['error']];
         }
 
         public function changeOrderStatus($data) {
@@ -63,31 +54,26 @@
             if(!isset($data['number']))
                 $error = 1;
 
+            if(!isset($data['decision']))
+                $error = 1;
+
             if($error == 1) 
                 echo "<script>history.back();</script>";
 
-            session_start();
-
-            if(isset($data['decision'])) {
-                $decision = 0;
-                switch($_POST['decision']) {
-                    case 'accept':
-                        $decision = 2;
-                        break;
-                    case 'reject':
-                        $decision = 3;
-                        break;
-                }
-                $result = $this->repository->changeOrderStatus($data['number'], $decision);
-                if(isset($result['error'])) {
-                    $_SESSION['error'] = $result['error'];
-                } else {
-                    $_SESSION['success'] = "Prawidłowo zmieniono status zamówienia";
-                    return true;
-                }
+            $decision = 0;
+            switch($data['decision']) {
+                case 'accept':
+                    $decision = 2;
+                    break;
+                case 'reject':
+                    $decision = 3;
+                    break;
             }
+            $result = $this->repository->changeOrderStatus($data['number'], $decision);
+            if(isset($result['success']))
+                return ["success" => "Prawidłowo zmieniono status zamówienia"];
 
-            return false;
+            return ["error" => $result['error']];
         }
 
         public function getOrder(string $orderNumber) {

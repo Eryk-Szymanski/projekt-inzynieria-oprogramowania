@@ -26,6 +26,7 @@
         <div class="col col-lg-3 bg-warning bg-gradient rounded d-flex flex-column justify-content-center align-items-center w-25 p-4">
           <h3 class="p-2">Edytuj produkt</h3>
           <form action="../scripts/handleForm.php" method="post" enctype="multipart/form-data" class="p-2 border-top border-white">
+            <input type="text" id="image_path" name="image_path" value="$product[image_path]" hidden/>
             <input type="number" id="product_id" name="product_id" value="$product[id]" hidden/>
             <label for="name">Nazwa</label>
             <input type="text" class="form-control" id="name" name="name" value="$product[name]"/>

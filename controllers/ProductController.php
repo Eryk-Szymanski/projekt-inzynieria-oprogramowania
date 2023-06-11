@@ -19,31 +19,19 @@
         }
 
         public function newProduct($data) {
-            $result = $this->service->newProduct($data);
-            if($result)
-                return header('location: ../views/products.php');
-            return header('location: ../');
+            return $this->service->newProduct($data);
         }
 
-        public function editProduct($data) {
-            $result = $this->service->updateProduct($data);
-            if($result)
-                return header('location: ../views/products.php');
-            return header('location: ../');
+        public function updateProduct($data) {
+            return $this->service->updateProduct($data);
         }
 
         public function deleteProduct(int $product_id) {
-            $result = $this->service->removeProduct($product_id);
-            if($result)
-                return header('location: ../views/products.php');
-            return header('location: ../');
+            return $this->service->deleteProduct($product_id);
         }
 
-        public function addProductToCart($data) {
-            $result = $this->service->addToCart($data);
-            if($result)
-                return header('location: ../views/products.php');
-            return header('location: ../');
+        public function addProductToCart($data, $cart) {
+            return $this->service->addProductToCart($data, $cart);
         }
 
         public function getOrderProducts($productsJson) {
@@ -55,7 +43,7 @@
         }
 
         public function getProducts() {
-            return $this->service->getProductsAll();
+            return $this->service->getProducts();
         }
 
     }

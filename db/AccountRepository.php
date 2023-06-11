@@ -2,7 +2,7 @@
 
     class AccountRepository {
 
-        private $connection;
+        private mysqli $connection;
 
         public function __construct() {
             include '../scripts/connect.php';
@@ -11,7 +11,7 @@
 
         public function getUserForLogin(string $email) {
 
-            $error = 0;
+            $error = "";
             try {
                 $stmt = $this->connection->prepare("SELECT users.id, users.name, users.pass, roles.role FROM `users` JOIN `roles` ON users.role_id = roles.id WHERE `email` = ?");
                 $stmt->bind_param("s", $email);
@@ -22,6 +22,7 @@
                 if ($stmt->affected_rows == 1) {
                     return [ "success" => true, "user" => $user];
                 }
+
             } catch (Exception $e) {
                 if($stmt->affected_rows != 1) {
                     $error = "Nie znaleziono użytkownika $email";
@@ -33,7 +34,7 @@
 
         public function createUser($user) {
 
-            $error = 0;
+            $error = "";
             try {
                 $stmt = $this->connection->prepare("INSERT INTO `addresses` (`zipcode`, `city`, `street`, `apartment`) VALUES (?, ?, ?, ?);");
                 $stmt->bind_param('ssss', $user['zipcode'], $user['city'], $user['street'], $user['apartment']);
@@ -48,6 +49,7 @@
                 if ($stmt->affected_rows == 1) {
                     return ["success" => true];
                 }
+
             } catch (Exception $e) {
                 if($stmt->affected_rows != 1) {
                     $error = "Nie utworzono użytkownika $email";
@@ -59,7 +61,7 @@
 
         public function getUser($user_id) {
 
-            $error = 0;
+            $error = "";
             try {
                 $sql = "SELECT id, name, surname, email, phone, address_id FROM `users` WHERE id = $user_id";
                 $result = $this->connection->query($sql);
@@ -68,6 +70,7 @@
                 if ($user) {
                     return [ "success" => true, "user" => $user];
                 }
+
             }
             catch (Exception $e) {
                 if($stmt->affected_rows != 1) {
@@ -80,7 +83,7 @@
 
         public function getAddress($address_id) {
 
-            $error = 0;
+            $error = "";
             try {
                 $sql = "SELECT zipcode, city, street, apartment FROM `addresses` WHERE id = $address_id";
                 $result = $this->connection->query($sql);
@@ -89,8 +92,8 @@
                 if ($address) {
                     return [ "success" => true, "address" => $address];
                 }
-            }
-            catch (Exception $e) {
+
+            } catch (Exception $e) {
                 if($stmt->affected_rows != 1) {
                     $error = "Nie utworzono użytkownika $email";
                 }
@@ -101,7 +104,7 @@
 
         public function getUsers() {
 
-            $error = 0;
+            $error = "";
             try {
                 $sql = "SELECT users.id, users.name, users.surname, roles.role FROM `users` JOIN `roles` ON users.role_id = roles.id";
                 $result = $this->connection->query($sql);
@@ -113,8 +116,8 @@
                 if ($rows) {
                     return ["success" => true, "users" => $rows];
                 }
-            }
-            catch (Exception $e) {
+                
+            } catch (Exception $e) {
                 if($stmt->affected_rows != 1) {
                     $error = "Nie pobrano użytkowników";
                 }

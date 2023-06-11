@@ -2,7 +2,7 @@
 
     class OrderRepository {
 
-        private $connection;
+        private mysqli $connection;
 
         public function __construct() {
             include '../scripts/connect.php';
@@ -11,7 +11,7 @@
 
         public function newOrder($order) {
 
-            $error = 0;
+            $error = "";
             try {
                 $status_id = 1;
                 $stmt = $this->connection->prepare("INSERT INTO `orders` (`number`, `user_id`, `products`, `payment_method_id`, `delivery_method_id`, `delivery_address_id`, `total_price`, `comments`, `status_id`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);");
@@ -33,7 +33,7 @@
 
         public function changeOrderStatus(string $orderNumber, int $decision) {
 
-            $error = 0;
+            $error = "";
             try {
                 $stmt = $this->connection->prepare("UPDATE orders SET status_id = ? WHERE number = $orderNumber");
                 $stmt->bind_param("i", $decision);
@@ -54,7 +54,7 @@
 
         public function getOrder(string $orderNumber) {
 
-            $error = 0;
+            $error = "";
             try {
                 $sql = "SELECT 
                     orders.*, 
@@ -99,7 +99,7 @@
 
         public function getPaymentMethods() {
 
-            $error = 0;
+            $error = "";
             try {
                 $sql = "SELECT * FROM `payment_methods`";
                 $result = $this->connection->query($sql);
@@ -123,7 +123,7 @@
 
         public function getDeliveryMethods() {
 
-            $error = 0;
+            $error = "";
             try {
                 $sql = "SELECT * FROM `delivery_methods`";
                 $result = $this->connection->query($sql);
@@ -147,7 +147,7 @@
 
         public function getUserOrders(int $user_id) {
 
-            $error = 0;
+            $error = "";
             try {
                 $sql = "SELECT number, status_id FROM `orders` WHERE `user_id` = $user_id";
                 $result = $this->connection->query($sql);
@@ -171,7 +171,7 @@
 
         public function getOrdersByStatus(int $status_id) {
 
-            $error = 0;
+            $error = "";
             try {
                 $sql = "SELECT orders.number FROM `orders` WHERE `status_id` = $status_id";
                 $result = $this->connection->query($sql);

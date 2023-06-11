@@ -40,7 +40,7 @@
                       <div class="d-flex flex-column text-wrap m-2">
                         <a href='./product-details.php?product_id=$product[id]' class='text-decoration-none'><h3>$product[name]</h3></a>
                         <h3 class="text-left">$product[price] zł</h3>
-                        <form action="../controllers/handleForm.php" method="post" class="d-flex flex-column">
+                        <form action="../scripts/handleForm.php" method="post" class="d-flex flex-column">
                           <div class="d-flex flex-row align-items-center">
                             <input type="text" value="$product[name]" hidden="true" name="name" />
                             <input type="number" value="$product[id]" hidden="true" name="product_id" />

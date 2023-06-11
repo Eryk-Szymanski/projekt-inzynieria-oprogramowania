@@ -19,17 +19,11 @@
         }
 
         public function changeOrderStatus($data) {
-            $result = $this->service->changeOrderStatus($data);  
-            if($result) 
-                return header('location: ../views/logged.php');
-            return header('location: ../');
+            return $this->service->changeOrderStatus($data);  
         }
 
-        public function newOrder($data) {
-            $result = $this->service->newOrder($data);    
-            if($result)
-                return header('location: ../views/logged.php'); 
-            return header('location: ../');
+        public function newOrder($data, $cart, $cart_value) {
+            return $this->service->newOrder($data, $cart, $cart_value);    
         }
 
         public function getDeliveryMethods() {

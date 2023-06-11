@@ -21,16 +21,11 @@
             if($error == 1) 
                 echo "<script>history.back();</script>";
 
-            session_start();
-            $result = $this->repository->createProduct($product);
-            if(isset($result['error']))
-                $_SESSION['error'] = $result['error'];
-            else {
-                $_SESSION['success'] = "Prawidłowo dodano produkt";
-                return true;
-            }
+            $result = $this->repository->newProduct($product);
+            if(isset($result['success']))
+                return ["success" => "Prawidłowo zarejestrowano użytkownika"];
 
-            return false;
+            return ["error" => $result['error']];
         }
 
         public function updateProduct($product) {
@@ -44,36 +39,27 @@
             if($error == 1)
                 echo "<script>history.back();</script>";
 
-            session_start();
-            $result = $this->repository->changeProduct($product);
-            if(isset($result['error']))
-                $_SESSION['error'] = $result['error'];
-            else {
-                $_SESSION['success'] = "Prawidłowo zaktualizowano produkt";
-                return true;
-            }
+            $result = $this->repository->updateProduct($product);
+            if(isset($result['success']))
+                return ["success" => "Prawidłowo zaktualizowano produkt"];
             
-            return false;
+            return ["error" => $result['error']];
         }
 
-        public function removeProduct(int $product_id) {
+        public function deleteProduct(int $product_id) {
             
             if (empty($product_id))
                 echo "<script>history.back();</script>";
 
             session_start();
             $result = $this->repository->deleteProduct($product_id);
-            if(isset($result['error']))
-                $_SESSION['error'] = $result['error'];
-            else {
-                $_SESSION['success'] = "Prawidłowo usunięto produkt";
-                return true;
-            }
+            if(isset($result['success']))
+                return ["success" => "Prawidłowo usunięto produkt"];
 
-            return false;
+            return ["error" => $result['error']];
         }
 
-        public function getProductsAll() {
+        public function getProducts() {
 
             $result = $this->repository->getProducts();
             if(isset($result['success'])) 
@@ -85,7 +71,7 @@
 
         public function getProductDetails($product_id) {
 
-            $result = $this->repository->getProductData($product_id);
+            $result = $this->repository->getProductDetails($product_id);
             if(isset($result['success'])) 
                 return $result['product'];
             
@@ -107,7 +93,7 @@
             return $products;
         }
 
-        public function addToCart($product) {
+        public function addProductToCart($product, $cart) {
 
             $error = 0;
             foreach ($_POST as $key => $value) {
@@ -118,17 +104,15 @@
             if($error == 1) 
                 echo "<script>history.back();</script>";
             
-            session_start();
-
             try {
-                $_SESSION['cart'][$product['product_id']] = $product['quantity'];
-                $_SESSION['success'] = "Dodano produkt $product[name] do koszyka";
-                return true;
+                $cart[$product['product_id']] = $product['quantity'];
+                return ["success" => "Dodano produkt $product[name] do koszyka", "cart" => $cart];
+
             } catch (Exception $e) {
-                $_SESSION['error'] = "Nie dodano produktu";
+                $error = "Nie dodano produktu: " . "Message: " . $e->getMessage();
             }
 
-            return false;
+            return ["error" => $error];
         }
 
     }

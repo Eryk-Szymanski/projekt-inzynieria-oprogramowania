@@ -2,16 +2,16 @@
 
     class ProductRepository {
 
-        private $connection;
+        private mysqli $connection;
 
         public function __construct() {
             include '../scripts/connect.php';
             $this->connection = $mysqli;
         }
 
-        public function createProduct($product) {
+        public function newProduct($product) {
 
-            $error = 0;
+            $error = "";
             try {
                 $is_available = 0;
                 if(isset($product['is_available']))
@@ -33,9 +33,9 @@
             return ["error" => $error];
         }
 
-        public function changeProduct($product) {
+        public function updateProduct($product) {
 
-            $error = 0;
+            $error = "";
             try {
                 $is_available = 0;
                 if(isset($product['is_available']))
@@ -59,7 +59,7 @@
 
         public function deleteProduct(int $product_id) {
 
-            $error = 0;
+            $error = "";
             try {
                 $stmt = $this->connection->prepare("DELETE FROM products WHERE id = ?");
                 $stmt->bind_param("i", $product_id);
@@ -80,7 +80,7 @@
 
         public function getProducts() {
 
-            $error = 0;
+            $error = "";
             $products = [];
             try {
                 $sql = "SELECT * FROM `products`";
@@ -89,6 +89,7 @@
                     array_push($products, $product);
                 }
                 return ["success" => true, "products" => $products];
+                
             } catch (Exception $e) {
                 if($stmt->affected_rows != 1) {
                     $error = "Nie udało się pobrać produktów";
@@ -100,13 +101,14 @@
 
         public function getProduct(int $product_id) {
 
-            $error = 0;
+            $error = "";
             try {
                 $sql = "SELECT id, name, price, image_path FROM `products` WHERE id = $product_id";
                 $result = $this->connection->query($sql);
                 $product = $result->fetch_assoc();
 
                 return ["success" => true, "product" => $product];
+
             } catch (Exception $e) {
                 if($stmt->affected_rows != 1) {
                     $error = "Nie odnaleziono produktu";
@@ -116,15 +118,16 @@
             return ["error" => $error];
         }
 
-        public function getProductData(int $product_id) {
+        public function getProductDetails(int $product_id) {
 
-            $error = 0;
+            $error = "";
             try {
                 $sql = "SELECT * FROM `products` WHERE id = $product_id";
                 $result = $this->connection->query($sql);
                 $product = $result->fetch_assoc();
 
                 return ["success" => true, "product" => $product];
+
             } catch (Exception $e) {
                 if($stmt->affected_rows != 1) {
                     $error = "Nie odnaleziono produktu";
