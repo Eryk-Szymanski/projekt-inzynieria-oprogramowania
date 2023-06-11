@@ -23,7 +23,7 @@
         <h3 class="mt-4 pt-4 text-center">Wszystkie produkty</h3>
         <?php if (isset($_SESSION['user_id'])) 
         
-          $products = ProductController::getProducts();
+          $products = ProductController::getInstance()->getProducts();
           
           if(count($products)) {
             echo "<div class='d-flex flex-wrap flex-column flex-lg-row justify-content-center'>";
@@ -63,6 +63,6 @@ INFO;
       </div>
     </div>
     <?php require_once('./components/footer.php'); ?>
-    <script src="../scripts/displayInfoMessage.js"></script>
+    <script src="../js/displayInfoMessage.js"></script>
   </body>
 </html>

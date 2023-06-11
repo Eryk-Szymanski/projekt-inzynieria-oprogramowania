@@ -1,7 +1,6 @@
 <?php
   session_start();
   require_once('../controllers/AccountController.php');
-  $accountController = AccountController::getInstance();
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -27,7 +26,7 @@
                     <th>Rola</th>
                 </tr>
 USERS;
-            $users = $accountController->getUsers();
+            $users = AccountController::getInstance()->getUsers();
             foreach ($users as $user) {
                 echo <<< USERSADMIN
                 <tr>

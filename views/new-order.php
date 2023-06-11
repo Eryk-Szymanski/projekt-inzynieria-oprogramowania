@@ -21,11 +21,11 @@
         <div class="col col-lg-6 p-4 mx-1 my-4 bg-warning bg-gradient rounded d-flex flex-column">
           <h3 class="px-4 py-2">Nowe zamówienie</h3>
 
-          <form action="../controllers/handleForm.php" method="post" class="w-100">
+          <form action="../scripts/handleForm.php" method="post" class="w-100">
             <?php
             
-              $user = AccountController::getUser($_SESSION['user_id']);
-              $address = AccountController::getAddress($user['address_id']);
+              $user = AccountController::getInstance()->getUser($_SESSION['user_id']);
+              $address = AccountController::getInstance()->getAddress($user['address_id']);
               echo <<< USER_DATA
                 <div class="d-flex flex-column flex-lg-row">
                   <div class="col col-lg-6 p-4 border-top border-white">
@@ -48,7 +48,7 @@
 USER_DATA;
 
 // Metoda płatności
-              $payment_methods = OrderController::getPaymentMethods();
+              $payment_methods = OrderController::getInstance()->getPaymentMethods();
               echo "<div class='d-flex flex-column flex-lg-row'>";
               echo "<div class='col col-lg-6 p-4 border-top border-white'>";
               echo "<h5>Wybierz metodę płatności:</h5>";
@@ -64,7 +64,7 @@ PAYMENT_METHOD;
               }
               echo "</div>";
 // Sposób dostawy  
-              $delivery_methods = OrderController::getDeliveryMethods();
+              $delivery_methods = OrderController::getInstance()->getDeliveryMethods();
               echo "<div class='col col-lg-6 p-4 border-top border-white'>";
               echo "<h5>Wybierz sposób dostawy:</h5>";
               foreach($delivery_methods as $delivery_method) {
@@ -110,7 +110,7 @@ DELIVERY_METHOD;
               $test = json_encode($products);
               $productsJson = json_decode($test);
               $cart_value = 0;
-              $products = ProductController::getOrderProducts($productsJson);
+              $products = ProductController::getInstance()->getOrderProducts($productsJson);
               foreach($products as $product) {
                 $cart_value += $product['final_price'];
                 $img = "";
@@ -139,6 +139,6 @@ PRODUCT;
       <?php endif ?>
     </div>
     <?php require_once('./components/footer.php'); ?>
-    <script src="../scripts/deliveryMethodCheckbox.js"></script>
+    <script src="../js/deliveryMethodCheckbox.js"></script>
   </body>
 </html>

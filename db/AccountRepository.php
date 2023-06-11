@@ -1,122 +1,128 @@
 <?php declare(strict_types=1);
 
-function getUserForLogin(string $email) {
-    require_once 'connect.php';
+    class AccountRepository {
 
-    $error = 0;
-    try {
-        $stmt = $mysqli->prepare("SELECT users.id, users.name, users.pass, roles.role FROM `users` JOIN `roles` ON users.role_id = roles.id WHERE `email` = ?");
-        $stmt->bind_param("s", $email);
-        $stmt->execute();
-        $result = $stmt->get_result();
-        $user = $result->fetch_assoc();
+        private $connection;
 
-        if ($stmt->affected_rows == 1) {
-            return [ "success" => true, "user" => $user];
+        public function __construct() {
+            include '../scripts/connect.php';
+            $this->connection = $mysqli;
         }
-    } catch (Exception $e) {
-        if($stmt->affected_rows != 1) {
-            $error = "Nie znaleziono użytkownika $email";
+
+        public function getUserForLogin(string $email) {
+
+            $error = 0;
+            try {
+                $stmt = $this->connection->prepare("SELECT users.id, users.name, users.pass, roles.role FROM `users` JOIN `roles` ON users.role_id = roles.id WHERE `email` = ?");
+                $stmt->bind_param("s", $email);
+                $stmt->execute();
+                $result = $stmt->get_result();
+                $user = $result->fetch_assoc();
+
+                if ($stmt->affected_rows == 1) {
+                    return [ "success" => true, "user" => $user];
+                }
+            } catch (Exception $e) {
+                if($stmt->affected_rows != 1) {
+                    $error = "Nie znaleziono użytkownika $email";
+                }
+                $error = $error . "Message: " . $e->getMessage();
+            }
+            return ["error" => $error, "user" => null];
         }
-        $error = $error . "Message: " . $e->getMessage();
+
+        public function createUser($user) {
+
+            $error = 0;
+            try {
+                $stmt = $this->connection->prepare("INSERT INTO `addresses` (`zipcode`, `city`, `street`, `apartment`) VALUES (?, ?, ?, ?);");
+                $stmt->bind_param('ssss', $user['zipcode'], $user['city'], $user['street'], $user['apartment']);
+                $stmt->execute();
+
+                $address_id = $this->connection->insert_id;
+                
+                $stmt = $this->connection->prepare("INSERT INTO `users` (`name`, `surname`, `email`, `phone`, `pass`, `address_id`) VALUES (?, ?, ?, ?, ?, ?);");
+                $stmt->bind_param("sssssi", $user['name'], $user['surname'], $user['email1'], $user['phone'], $user['hash'], $address_id);
+                $stmt->execute();
+
+                if ($stmt->affected_rows == 1) {
+                    return ["success" => true];
+                }
+            } catch (Exception $e) {
+                if($stmt->affected_rows != 1) {
+                    $error = "Nie utworzono użytkownika $email";
+                }
+                $error = $error . "Message: " . $e->getMessage();
+            }
+            return ["error" => $error];
+        }
+
+        public function getUser($user_id) {
+
+            $error = 0;
+            try {
+                $sql = "SELECT id, name, surname, email, phone, address_id FROM `users` WHERE id = $user_id";
+                $result = $this->connection->query($sql);
+                $user = $result->fetch_assoc();
+
+                if ($user) {
+                    return [ "success" => true, "user" => $user];
+                }
+            }
+            catch (Exception $e) {
+                if($stmt->affected_rows != 1) {
+                    $error = "Nie utworzono użytkownika $email";
+                }
+                $error = $error . "Message: " . $e->getMessage();
+            }
+            return ["error" => $error];
+        }
+
+        public function getAddress($address_id) {
+
+            $error = 0;
+            try {
+                $sql = "SELECT zipcode, city, street, apartment FROM `addresses` WHERE id = $address_id";
+                $result = $this->connection->query($sql);
+                $address = $result->fetch_assoc();
+
+                if ($address) {
+                    return [ "success" => true, "address" => $address];
+                }
+            }
+            catch (Exception $e) {
+                if($stmt->affected_rows != 1) {
+                    $error = "Nie utworzono użytkownika $email";
+                }
+                $error = $error . "Message: " . $e->getMessage();
+            }
+            return ["error" => $error];
+        }
+
+        public function getUsers() {
+
+            $error = 0;
+            try {
+                $sql = "SELECT users.id, users.name, users.surname, roles.role FROM `users` JOIN `roles` ON users.role_id = roles.id";
+                $result = $this->connection->query($sql);
+                $rows = [];
+                while($row = $result->fetch_assoc()) {
+                    array_push($rows, $row);
+                }
+            
+                if ($rows) {
+                    return ["success" => true, "users" => $rows];
+                }
+            }
+            catch (Exception $e) {
+                if($stmt->affected_rows != 1) {
+                    $error = "Nie pobrano użytkowników";
+                }
+                $error = $error . "Message: " . $e->getMessage();
+            }
+            return ["error" => $error];
+        }
+
     }
-    return ["error" => $error, "user" => null];
-}
-
-function createUser($user) {
-    require_once 'connect.php';
-
-    $error = 0;
-    try {
-        $stmt = $mysqli->prepare("INSERT INTO `addresses` (`zipcode`, `city`, `street`, `apartment`) VALUES (?, ?, ?, ?);");
-        $stmt->bind_param('ssss', $user['zipcode'], $user['city'], $user['street'], $user['apartment']);
-        $stmt->execute();
-
-        $address_id = $mysqli->insert_id;
-        
-        $stmt = $mysqli->prepare("INSERT INTO `users` (`name`, `surname`, `email`, `phone`, `pass`, `address_id`) VALUES (?, ?, ?, ?, ?, ?);");
-        $stmt->bind_param("sssssi", $user['name'], $user['surname'], $user['email1'], $user['phone'], $user['hash'], $address_id);
-        $stmt->execute();
-
-        if ($stmt->affected_rows == 1) {
-            return ["success" => true];
-        }
-    } catch (Exception $e) {
-        if($stmt->affected_rows != 1) {
-            $error = "Nie utworzono użytkownika $email";
-        }
-        $error = $error . "Message: " . $e->getMessage();
-    }
-    return ["error" => $error];
-}
-
-function getUser($user_id) {
-    $mysqli = new mysqli("localhost", "root", "", "inzynieria-oprogramowania-db");
-
-    $error = 0;
-    try {
-        $sql = "SELECT id, name, surname, email, phone, address_id FROM `users` WHERE id = $user_id";
-        $result = $mysqli->query($sql);
-        $user = $result->fetch_assoc();
-
-        if ($user) {
-            return [ "success" => true, "user" => $user];
-        }
-    }
-    catch (Exception $e) {
-        if($stmt->affected_rows != 1) {
-            $error = "Nie utworzono użytkownika $email";
-        }
-        $error = $error . "Message: " . $e->getMessage();
-    }
-    return ["error" => $error];
-}
-
-function getAddress($address_id) {
-    $mysqli = new mysqli("localhost", "root", "", "inzynieria-oprogramowania-db");
-
-    $error = 0;
-    try {
-        $sql = "SELECT zipcode, city, street, apartment FROM `addresses` WHERE id = $address_id";
-        $result = $mysqli->query($sql);
-        $address = $result->fetch_assoc();
-
-        if ($address) {
-            return [ "success" => true, "address" => $address];
-        }
-    }
-    catch (Exception $e) {
-        if($stmt->affected_rows != 1) {
-            $error = "Nie utworzono użytkownika $email";
-        }
-        $error = $error . "Message: " . $e->getMessage();
-    }
-    return ["error" => $error];
-}
-
-function getUsers() {
-    $mysqli = new mysqli("localhost", "root", "", "inzynieria-oprogramowania-db");
-
-    $error = 0;
-    try {
-        $sql = "SELECT users.id, users.name, users.surname, roles.role FROM `users` JOIN `roles` ON users.role_id = roles.id";
-        $result = $mysqli->query($sql);
-        $rows = [];
-        while($row = $result->fetch_assoc()) {
-            array_push($rows, $row);
-        }
-    
-        if ($rows) {
-            return ["success" => true, "users" => $rows];
-        }
-    }
-    catch (Exception $e) {
-        if($stmt->affected_rows != 1) {
-            $error = "Nie pobrano użytkowników";
-        }
-        $error = $error . "Message: " . $e->getMessage();
-    }
-    return ["error" => $error];
-}
 
 ?>

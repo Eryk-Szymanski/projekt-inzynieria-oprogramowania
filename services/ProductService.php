@@ -1,139 +1,136 @@
 <?php declare(strict_types=1);
 
-function addProduct($product) {
-    require_once '../db/ProductRepository.php';
-    
-    $error = 0;
-    foreach ($_POST as $key => $value) {
-        if (empty($value)) {
-            $error = 1;
+    include '../db/ProductRepository.php';
+
+    class ProductService {
+
+        private ProductRepository $repository;
+
+        public function __construct() {
+            $this->repository = new ProductRepository();
         }
-    }
 
-    if($error == 1) {
-        echo "<script>history.back();</script>";
-        exit();
-    }
+        public function newProduct($product) {
+            
+            $error = 0;
+            foreach ($_POST as $key => $value) {
+                if (empty($value))
+                    $error = 1;
+            }
 
-    session_start();
-    $result = createProduct($product);
-    if(isset($result['error']))
-        $_SESSION['error'] = $result['error'];
-    else
-        $_SESSION['success'] = "Prawidłowo dodano produkt";
+            if($error == 1) 
+                echo "<script>history.back();</script>";
 
-    header('location: ../views/products.php');
-}
+            session_start();
+            $result = $this->repository->createProduct($product);
+            if(isset($result['error']))
+                $_SESSION['error'] = $result['error'];
+            else {
+                $_SESSION['success'] = "Prawidłowo dodano produkt";
+                return true;
+            }
 
-function updateProduct($product) {
-    require_once '../db/ProductRepository.php';
-    
-    $error = 0;
-    foreach ($_POST as $key => $value) {
-        if (empty($value)) {
-            $error = 1;
+            return false;
         }
-    }
 
-    if($error == 1) {
-        echo "<script>history.back();</script>";
-        exit();
-    }
+        public function updateProduct($product) {
+            
+            $error = 0;
+            foreach ($_POST as $key => $value) {
+                if (empty($value)) 
+                    $error = 1;
+            }
 
-    session_start();
-    $result = changeProduct($product);
-    if(isset($result['error']))
-        $_SESSION['error'] = $result['error'];
-    else
-        $_SESSION['success'] = "Prawidłowo zaktualizowano produkt";
-    
-    header('location: ../views/products.php');
-}
+            if($error == 1)
+                echo "<script>history.back();</script>";
 
-function removeProduct($product_id) {
-    require_once '../db/ProductRepository.php';
-    
-    $error = 0;
-    if (empty($product_id)) {
-        $error = 1;
-    }
-
-    if($error == 1) {
-        echo "<script>history.back();</script>";
-        exit();
-    }
-
-    session_start();
-    $result = deleteProduct($product_id);
-    if(isset($result['error']))
-        $_SESSION['error'] = $result['error'];
-    else {
-        $_SESSION['success'] = "Prawidłowo usunięto produkt";
-        header('location: ../views/products.php');
-        exit();
-    }
-
-    header('location: ../');
-}
-
-function getProductsAll() {
-    require_once '../db/ProductRepository.php';
-    $result = getProducts();
-    if(isset($result['success'])) {
-        return $result['products'];
-    }
-    return null;
-}
-
-
-function getProductDetails($product_id) {
-    require_once '../db/ProductRepository.php';
-    $result = getProductData($product_id);
-    if(isset($result['success'])) {
-        return $result['product'];
-    }
-    return null;
-}
-
-function getOrderProducts($productsJson) {
-    require_once '../db/ProductRepository.php';
-    $products = [];
-    foreach($productsJson as $productJson) {
-        $result = getProduct($productJson->product_id);
-        if(isset($result['success'])) {
-            $result['product']['quantity'] = $productJson->quantity;
-            if(isset($result['product']['price'])) 
-                $result['product']['final_price'] = intval($productJson->quantity) * intval($result['product']['price']);
-            array_push($products, $result['product']);
+            session_start();
+            $result = $this->repository->changeProduct($product);
+            if(isset($result['error']))
+                $_SESSION['error'] = $result['error'];
+            else {
+                $_SESSION['success'] = "Prawidłowo zaktualizowano produkt";
+                return true;
+            }
+            
+            return false;
         }
-    }
-    return $products;
-}
 
-function addToCart($product) {
-    $error = 0;
-    foreach ($_POST as $key => $value) {
-        if (empty($value)) {
-            $error = 1;
+        public function removeProduct(int $product_id) {
+            
+            if (empty($product_id))
+                echo "<script>history.back();</script>";
+
+            session_start();
+            $result = $this->repository->deleteProduct($product_id);
+            if(isset($result['error']))
+                $_SESSION['error'] = $result['error'];
+            else {
+                $_SESSION['success'] = "Prawidłowo usunięto produkt";
+                return true;
+            }
+
+            return false;
         }
-    }
 
-    if($error == 1) {
-        echo "<script>history.back();</script>";
-        exit();
-    }
-    
-    session_start();
+        public function getProductsAll() {
 
-    try {
-        $_SESSION['cart'][$product['product_id']] = $product['quantity'];
-        $_SESSION['success'] = "Dodano produkt $product[name] do koszyka";
-    } catch (Exception $e) {
-        echo $e->getMessage();
-        $_SESSION['error'] = "Nie dodano produktu";
-    }
+            $result = $this->repository->getProducts();
+            if(isset($result['success'])) 
+                return $result['products'];
+            
+            return null;
+        }
 
-    header('location: ../views/products.php');
-}
+
+        public function getProductDetails($product_id) {
+
+            $result = $this->repository->getProductData($product_id);
+            if(isset($result['success'])) 
+                return $result['product'];
+            
+            return null;
+        }
+
+        public function getOrderProducts($productsJson) {
+
+            $products = [];
+            foreach($productsJson as $productJson) {
+                $result = $this->repository->getProduct($productJson->product_id);
+                if(isset($result['success'])) {
+                    $result['product']['quantity'] = $productJson->quantity;
+                    if(isset($result['product']['price'])) 
+                        $result['product']['final_price'] = intval($productJson->quantity) * intval($result['product']['price']);
+                    array_push($products, $result['product']);
+                }
+            }
+            return $products;
+        }
+
+        public function addToCart($product) {
+
+            $error = 0;
+            foreach ($_POST as $key => $value) {
+                if (empty($value)) 
+                    $error = 1;
+            }
+
+            if($error == 1) 
+                echo "<script>history.back();</script>";
+            
+            session_start();
+
+            try {
+                $_SESSION['cart'][$product['product_id']] = $product['quantity'];
+                $_SESSION['success'] = "Dodano produkt $product[name] do koszyka";
+                return true;
+            } catch (Exception $e) {
+                $_SESSION['error'] = "Nie dodano produktu";
+            }
+
+            return false;
+        }
+
+    }
 
 ?>

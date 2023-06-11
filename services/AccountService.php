@@ -1,27 +1,22 @@
 <?php declare(strict_types=1);
 
+    include '../db/AccountRepository.php';
+
     class AccountService {
 
-        function __construct() {
+        private AccountRepository $repository;
 
+        public function __construct() {
+            $this->repository = new AccountRepository();
         }
 
-        public function loginUser(string $email) {
+        public function login(string $email) {
             session_start();
 
-            require_once '../db/AccountRepository.php';
-
-            $error = 0;
             if (empty($email))
-                $error = 1;
-
-            if($error == 1) {
-                $_SESSION['error'] = "Wypełnij wszystkie pola";
                 echo "<script>history.back();</script>";
-                exit();
-            }
 
-            $result = getUserForLogin($email);
+            $result = $this->repository->getUserForLogin($email);
             if(isset($result['user'])) {
                 $user = $result['user'];
             } else {
@@ -33,17 +28,14 @@
                 $_SESSION['user_role'] = $user['role'];
                 $_SESSION['user_name'] = $user['name'];
                 $_SESSION['user_id'] = $user['id'];
-                header('location: ../views/logged.php');
-                exit();
+                return true;
             } else {
                 $_SESSION['error'] = "Nie zalogowano użytkownika $_POST[email]";
             }
-
-            header('location: ../');
+            return false;
         }
 
-        function registerUser($user) {
-            require_once '../db/AccountRepository.php';
+        public function register($user) {
 
             $error = 0;
             foreach ($user as $key => $value) {
@@ -54,25 +46,22 @@
             if (!isset($user['agreeTerms']))
                 $error = 1;
 
-            if($error == 1) {
+            if($error == 1)
                 echo "<script>history.back();</script>";
-                exit();
-            }
 
             $user['hash'] = password_hash($user['pass1'], PASSWORD_ARGON2ID); 
             
             session_start();
 
-            $result = createUser($user);
+            $result = $this->repository->createUser($user);
             if(isset($result['error']))
                 $_SESSION['error'] = $result['error'];
             else
                 $_SESSION['success'] = "Prawidłowo zarejestrowano użytkownika";
 
-            header('location: ../');
         }
 
-        function logoutUser() {
+        public function logout() {
             $_SESSION = array();
 
             if (ini_get("session.use_cookies")) {
@@ -84,57 +73,40 @@
             }
 
             session_destroy();
-
-            header('location: ../');
         }
 
-        function getUserData($user_id) {
-            require_once '../db/AccountRepository.php';
+        public function getUser(int $user_id) {
 
-            $error = 0;
             if (empty($user_id))
-                $error = 1;
-
-            if($error == 1) {
                 echo "<script>history.back();</script>";
-                exit();
-            }
 
-            $result = getUser($user_id);
+            $result = $this->repository->getUser($user_id);
             if(isset($result['success'])) {
                 return $result['user'];
             }
             return null;
         }
 
-        function getAddressData($address_id) {
-            require_once '../db/AccountRepository.php';
+        public function getAddress(int $address_id) {
 
-            $error = 0;
             if (empty($address_id))
-                $error = 1;
-
-            if($error == 1) {
                 echo "<script>history.back();</script>";
-                exit();
-            }
 
-            $result = getAddress($address_id);
-            if(isset($result['success'])) {
+            $result = $this->repository->getAddress($address_id);
+            if(isset($result['success'])) 
                 return $result['address'];
-            }
+            
             return null;
         }
 
-        function getAllUsers() {
-            require_once '../db/AccountRepository.php';
-            $result = getUsers();
-            if(isset($result['success'])) {
+        public function getUsers() {
+
+            $result = $this->repository->getUsers();
+            if(isset($result['success'])) 
                 return $result['users'];
-            }
+            
             return null;
         }
-
     }
 
 ?>

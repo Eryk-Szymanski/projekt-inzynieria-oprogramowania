@@ -1,35 +1,55 @@
-<?php
+<?php declare(strict_types=1);
 
-    require_once '../services/OrderService.php';
+    include '../services/OrderService.php';
 
     class OrderController {
 
-        public static function changeOrderStatus($data) {
-            acceptRejectOrder($data);  
+        private OrderService $service;
+        private static OrderController $instance;
+
+        private function __construct() {
+            $this->service = new OrderService();
         }
 
-        public static function newOrder($data) {
-            registerOrder($data);     
+        public static function getInstance() {
+            if(!isset(self::$instance)) {
+                self::$instance = new OrderController();
+            }
+            return self::$instance;
         }
 
-        public static function getDeliveryMethods() {
-            return getDeliveryMethodsData();
+        public function changeOrderStatus($data) {
+            $result = $this->service->changeOrderStatus($data);  
+            if($result) 
+                return header('location: ../views/logged.php');
+            return header('location: ../');
         }
 
-        public static function getPaymentMethods() {
-            return getPaymentMethodsData();
+        public function newOrder($data) {
+            $result = $this->service->newOrder($data);    
+            if($result)
+                return header('location: ../views/logged.php'); 
+            return header('location: ../');
         }
 
-        public static function getOrder($order_number) {
-            return getOneOrder($order_number); 
+        public function getDeliveryMethods() {
+            return $this->service->getDeliveryMethods();
         }
 
-        public static function getOrdersByStatus($status) {
-            return getOrdersDataByStatus($status);    
+        public function getPaymentMethods() {
+            return $this->service->getPaymentMethods();
         }
 
-        public static function getUserOrders($user_id) {
-            return getUserOrdersData($user_id);   
+        public function getOrder(string $order_number) {
+            return $this->service->getOrder($order_number); 
+        }
+
+        public function getOrdersByStatus(int $status_id) {
+            return $this->service->getOrdersByStatus($status_id);    
+        }
+
+        public function getUserOrders(int $user_id) {
+            return $this->service->getUserOrders($user_id);   
         }
 
     }

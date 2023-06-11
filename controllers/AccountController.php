@@ -1,13 +1,14 @@
-<?php
+<?php declare(strict_types=1);
 
     include '../services/AccountService.php';
 
     class AccountController {
 
-        private $service;
-        private static $instance;
+        private AccountService $service;
+        private static AccountController $instance;
 
         private function __construct() {
+            
             $this->service = new AccountService();
         }
 
@@ -18,28 +19,33 @@
             return self::$instance;
         }
 
-        public function login($email) {
-            $this->service->loginUser($email);
+        public function login(string $email) {
+            $result = $this->service->login($email);
+            if($result)
+                return header('location: ../views/logged.php');
+            return header('location: ../');
         }
 
         public function logout() {
-            $this->service->logoutUser();
+            $this->service->logout();
+            return header('location: ../');
         }
         
-        public static function register($data) {
-            registerUser($data);
+        public function register($data) {
+            $this->service->register($data);
+            return header('location: ../');
         }
 
-        public static function getUser($user_id) {
-            return getUserData($user_id);  
+        public function getUser(int $user_id) {
+            return $this->service->getUser($user_id);  
         }
 
         public function getUsers() {
-            return $this->service->getAllUsers();
+            return $this->service->getUsers();
         }
 
-        public static function getAddress($address_id) {
-            return getAddressData($address_id);  
+        public function getAddress(int $address_id) {
+            return $this->service->getAddress($address_id);  
         }
 
     }

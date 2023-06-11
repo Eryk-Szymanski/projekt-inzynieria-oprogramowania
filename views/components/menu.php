@@ -1,4 +1,4 @@
-<nav class="navbar navbar-expand-lg bg-warning fixed-top p-0 m-0">
+<nav class="navbar navbar-expand-lg bg-warning fixed-top text-dark p-0 m-0">
     
     <a href="./logged.php" class="d-flex align-items-center text-decoration-none fw-bolder mx-2">
         <img src="../images/logo.png" class="image-small"/>
@@ -31,7 +31,7 @@
                 ?>
                 <a href="./new-order.php"><i class="bi bi-basket3 fs-2 text-light"></i></a>
                 
-                <form action="../controllers/handleForm.php" method="post">
+                <form action="../scripts/handleForm.php" method="post">
                     <button type="submit" class="mx-4 px-4 btn btn-danger" name="logout">Wyloguj</button>
                 </form>
             </div>

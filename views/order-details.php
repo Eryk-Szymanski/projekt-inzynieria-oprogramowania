@@ -19,7 +19,7 @@
 
             require_once './components/menu.php';
 
-            $order = OrderController::getOrder($_GET['number']);
+            $order = OrderController::getInstance()->getOrder($_GET['number']);
             if ($order) {
               echo <<< INFO
                 <h3 class="p-4 m-0 bg-primary bg-gradient rounded">Numer: $order[number]</h3>
@@ -58,7 +58,7 @@
                 <h3 class="px-4">Produkty:</h3>
 INFO;
               $productsJson = json_decode($order['products'], false);
-              $products = ProductController::getOrderProducts($productsJson);
+              $products = ProductController::getInstance()->getOrderProducts($productsJson);
               echo "<div class='m-2 d-flex flex-wrap flex-column flex-lg-row'>";
               foreach ($products as $product) {
                 if(isset($product['name'])) {
@@ -87,12 +87,12 @@ INFO;
                 if($_SESSION['user_role'] == 'employee' && $order['status_id'] == 1) {
                   echo <<< OPTIONS
                   <div class="d-flex flex-column flex-lg-row w-100 justify-content-center">
-                    <form action="../controllers/handleForm.php" method="post" class="col col-lg-4 mx-4 my-1">
+                    <form action="../scripts/handleForm.php" method="post" class="col col-lg-4 mx-4 my-1">
                       <input type="text" value="accept" hidden="true" name="decision" />
                       <input type="text" value="$_GET[number]" hidden="true" name="number" />
                       <button type="submit" class="w-100 btn btn-success" name="acceptOrder">Zaakceptuj</button>
                     </form>
-                    <form action="../controllers/handleForm.php" method="post" class="col col-lg-4 mx-4 my-1">
+                    <form action="../scripts/handleForm.php" method="post" class="col col-lg-4 mx-4 my-1">
                       <input type="text" value="reject" hidden="true" name="decision" />
                       <input type="text" value="$_GET[number]" hidden="true" name="number" />
                       <button type="submit" class="w-100 btn btn-danger" name="rejectOrder">Odrzuć</button>

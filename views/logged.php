@@ -22,9 +22,8 @@
       <?php
         if (isset($_SESSION['user_id'])) {
 
-          require_once '../db/connect.php';
           if ($_SESSION['user_role'] == 'user') {
-            $orders = OrderController::getUserOrders($_SESSION['user_id']);
+            $orders = OrderController::getInstance()->getUserOrders($_SESSION['user_id']);
             echo <<< USERORDERS
             <div class="col col-lg-6 d-flex flex-column p-4 m-2">
               <h3 class="bg-primary bg-gradient p-4 my-4 rounded w-100">Twoje zamówienia</h3>
@@ -57,7 +56,7 @@ USERORDERS;
             <div class="col col-lg-3 d-flex flex-column p-4 m-2">
               <h3 class="bg-primary bg-gradient p-4 my-4 rounded w-100">Nowe zamówienia</h3>
 NEWORDERS;
-              $orders = OrderController::getOrdersByStatus(1);
+              $orders = OrderController::getInstance()->getOrdersByStatus(1);
               if($orders) {
                 foreach ($orders as $order) {
                   echo "<a href='./order-details.php?number=$order[number]' class='text-reset text-decoration-none fs-5 fw-bolder w-100 p-4 my-2 rounded border border-primary'>$order[number]</a>";
@@ -71,7 +70,7 @@ NEWORDERS;
             <div class="col col-lg-3 d-flex flex-column p-4 m-2">
               <h3 class="bg-success bg-gradient p-4 my-4 rounded w-100">Zaakceptowane</h3>
 ACCEPTEDORDERS;
-              $orders = OrderController::getOrdersByStatus(2);
+              $orders = OrderController::getInstance()->getOrdersByStatus(2);
               if($orders) {
                 foreach ($orders as $order) {
                   echo "<a href='./order-details.php?number=$order[number]' class='text-reset text-decoration-none fs-5 fw-bolder w-100 p-4 my-2 rounded border border-success'>$order[number]</a>";
@@ -85,7 +84,7 @@ ACCEPTEDORDERS;
             <div class="col col-lg-3 d-flex flex-column p-4 m-2">
               <h3 class="bg-danger bg-gradient p-4 my-4 rounded w-100">Odrzucone</h3>
 REJECTEDORDERS;
-              $orders = OrderController::getOrdersByStatus(3);
+              $orders = OrderController::getInstance()->getOrdersByStatus(3);
               if($orders) {
                 foreach ($orders as $order) {
                   echo "<a href='./order-details.php?number=$order[number]' class='text-reset text-decoration-none fs-5 fw-bolder w-100 p-4 my-2 rounded border border-danger'>$order[number]</a>";
@@ -99,6 +98,6 @@ REJECTEDORDERS;
       ?>
     </div>
     <?php require_once('./components/footer.php'); ?>
-    <script src="../scripts/displayInfoMessage.js"></script>
+    <script src="../js/displayInfoMessage.js"></script>
   </body>
 </html>

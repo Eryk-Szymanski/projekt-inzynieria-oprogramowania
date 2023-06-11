@@ -18,7 +18,7 @@
 
             require_once './components/menu.php';
 
-            $product = ProductController::getProductDetails($_GET['product_id']);
+            $product = ProductController::getInstance()->getProductDetails($_GET['product_id']);
             if ($product) {
                 $available = "<i class='bi bi-x-square-fill text-danger mx-2'></i>Niedostępny";
                 if($product['is_available'] == 1)

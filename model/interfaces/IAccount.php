@@ -11,7 +11,7 @@
      * @property Address $address
      */
     interface IAccount {
-        public function getFullName();
+        function getFullName();
     }
 
 ?>
