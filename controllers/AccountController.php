@@ -1,8 +1,11 @@
 <?php declare(strict_types=1);
 
+    use model\interfaces\IController;
+    require_once '../model/interfaces/IController.php';
+
     include '../services/AccountService.php';
 
-    class AccountController {
+    class AccountController implements IController {
 
         private AccountService $service;
         private static AccountController $instance;

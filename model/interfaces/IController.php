@@ -1,11 +1,13 @@
 <?php
 
+    namespace model\interfaces;
+
     /**
      * @property IController $instance
      * @property IService $service
      */
     interface IController {
-        static function getInstance();
+        public static function getInstance();
     }
 
 ?>

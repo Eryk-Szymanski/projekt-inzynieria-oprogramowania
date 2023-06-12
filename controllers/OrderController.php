@@ -1,8 +1,11 @@
 <?php declare(strict_types=1);
 
+    use model\interfaces\IController;
+    require_once '../model/interfaces/IController.php';
+
     include '../services/OrderService.php';
 
-    class OrderController {
+    class OrderController implements IController {
 
         private OrderService $service;
         private static OrderController $instance;

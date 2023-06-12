@@ -1,8 +1,11 @@
 <?php declare(strict_types=1);
 
+    use model\interfaces\IService;
+    require_once '../model/interfaces/IService.php';
+
     include '../db/AccountRepository.php';
 
-    class AccountService {
+    class AccountService implements IService {
 
         private AccountRepository $repository;
 

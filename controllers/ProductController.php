@@ -1,8 +1,11 @@
 <?php declare(strict_types=1);
 
+    use model\interfaces\IController;
+    require_once '../model/interfaces/IController.php';
+
     include '../services/ProductService.php';
 
-    class ProductController {
+    class ProductController implements IController {
 
         private ProductService $service;
         private static ProductController $instance;
