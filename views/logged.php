@@ -1,94 +1,103 @@
 <?php
   session_start();
+  require_once('../controllers/OrderController.php');
 ?>
 <!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>E-shop | Strona Główna</title>
+    <title>Candy Shop | Strona Główna</title>
+    <?php require_once '../style/links.php'; ?>
   </head>
   <body>
-    <?php
-      require_once './components/menu.php';
-
+    <?php 
+      require_once './components/menu.php'; 
       if (isset($_SESSION['success'])) {
-        echo <<< LOGOUT
-        <form action="../scripts/logout.php" method="post">
-            <button type="submit">Wyloguj</button>
-        </form>
-LOGOUT;
-        echo "<p>Witaj $_SESSION[user_name]</p>";
-        require_once '../scripts/connect.php';
-        if ($_SESSION['user_role'] == 'user') {
-          $sql = "SELECT orders.number FROM `orders` WHERE `user_id` = $_SESSION[user_id]";
-          $result = $mysqli->query($sql);
-          echo <<< USER
-          <h5><a href="./products.php">Wszystkie produkty</a></h5>
-          <h3>twoje zamówienia</h3>
-USER;
-          $orders = $result->fetch_assoc();
-          if(!is_null($orders)) {
-            foreach ($orders as $order) {
-              echo "<a href='./order-details.php?number=$order[number]'>$order[number]</a><br>";
-            }
-          } else {
-            echo "<h3>Brak zamówień</h3>";
-          }
-        }
-        elseif ($_SESSION['user_role'] == 'superuser') {
-          $sql = "SELECT orders.number FROM `orders` WHERE `status` = 0";
-          $result = $mysqli->query($sql);
-          echo <<< SUPERUSER
-          <h5><a href="./products.php">Wszystkie produkty</a></h5>
-          <h3>Nowe zamówienia -> Do zaakceptowania</h3>
-SUPERUSER;
-
-          while ($order = $result->fetch_assoc()) {
-            echo "<a href='./order-details.php?number=$order[number]'>$order[number]</a><br>";
-          }
-
-          $sql = "SELECT orders.number FROM `orders` WHERE `status` = 1";
-          $result = $mysqli->query($sql);  
-          echo "<h3>Historia zamówień -> Zaakceptowane</h3>";
-          while ($order = $result->fetch_assoc()) {
-            echo "<a href='./order-details.php?number=$order[number]'>$order[number]</a><br>";
-          }
-
-          $sql = "SELECT orders.number FROM `orders` WHERE `status` = 2";
-          $result = $mysqli->query($sql);  
-          echo "<h3>Historia zamówień -> Odrzucone</h3>";
-          while ($order = $result->fetch_assoc()) {
-            echo "<a href='./order-details.php?number=$order[number]'>$order[number]</a><br>";
-          }
-        }
-        elseif ($_SESSION['user_role'] == 'admin') {
-          $sql = "SELECT users.id, users.name, users.surname, roles.role FROM `users` JOIN `roles` ON users.role_id = roles.id";
-          $result = $mysqli->query($sql);
-          echo <<< ADMIN
-          <h5><a href="./products.php">Wszystkie produkty</a></h5>
-          <h3>Uzytkownicy</h3>
-          <table>
-            <tr>
-              <th>Id</th>
-              <th>Imię</th>
-              <th>Nazwisko</th>
-              <th>Rola</th>
-            </tr>
-ADMIN;
-          while ($user = $result->fetch_assoc()) {
-            echo <<< USERSADMIN
-            <tr>
-              <td>$user[id]</td>
-              <td>$user[name]</td>
-              <td>$user[surname]</td>
-              <td>$user[role]</td>
-            </tr>
-USERSADMIN;
-          }
-          echo "</table>";
-        }
-      }
+        echo "<h5 class='p-4 m-4 bg-primary rounded text-white info-message' id='info'>$_SESSION[success]</h5>";
+        unset($_SESSION['success']);
+      }  
     ?>
+    <div class="container-fluid w-100 bg-dark screen-height d-flex flex-column flex-lg-row justify-content-center text-light menu-buffer">
+      <?php
+        if (isset($_SESSION['user_id'])) {
+
+          if ($_SESSION['user_role'] == 'user') {
+            $orders = OrderController::getInstance()->getUserOrders($_SESSION['user_id']);
+            echo <<< USERORDERS
+            <div class="col col-lg-6 d-flex flex-column p-4 m-2">
+              <h3 class="bg-primary bg-gradient p-4 my-4 rounded w-100">Twoje zamówienia</h3>
+USERORDERS;
+            if(!is_null($orders)) {
+              foreach ($orders as $order) {
+                $bordercolor = "secondary";
+                switch ($order['status_id']) {
+                  case 1:
+                    $bordercolor = "primary";
+                    break;
+                  case 2:
+                    $bordercolor = "success";
+                    break;
+                  case 3:
+                    $bordercolor = "danger";
+                    break;
+                  default:
+                    break;
+                }
+                echo "<a href='./order-details.php?number=$order[number]' class='text-reset text-decoration-none fs-5 fw-bolder w-100 p-4 my-2 rounded border border-$bordercolor'>$order[number]</a>";
+              }
+            } else {
+              echo "<h3>Brak zamówień</h3>";
+            }
+            echo "</div>";
+          }
+          elseif ($_SESSION['user_role'] == 'employee' || $_SESSION['user_role'] == 'admin') {
+            echo <<< NEWORDERS
+            <div class="col col-lg-3 d-flex flex-column p-4 m-2">
+              <h3 class="bg-primary bg-gradient p-4 my-4 rounded w-100">Nowe zamówienia</h3>
+NEWORDERS;
+              $orders = OrderController::getInstance()->getOrdersByStatus(1);
+              if($orders) {
+                foreach ($orders as $order) {
+                  echo "<a href='./order-details.php?number=$order[number]' class='text-reset text-decoration-none fs-5 fw-bolder w-100 p-4 my-2 rounded border border-primary'>$order[number]</a>";
+                }
+              } else {
+                echo "<h5>Brak zamówień</h5>";
+              }
+            echo "</div>";
+
+            echo <<< ACCEPTEDORDERS
+            <div class="col col-lg-3 d-flex flex-column p-4 m-2">
+              <h3 class="bg-success bg-gradient p-4 my-4 rounded w-100">Zaakceptowane</h3>
+ACCEPTEDORDERS;
+              $orders = OrderController::getInstance()->getOrdersByStatus(2);
+              if($orders) {
+                foreach ($orders as $order) {
+                  echo "<a href='./order-details.php?number=$order[number]' class='text-reset text-decoration-none fs-5 fw-bolder w-100 p-4 my-2 rounded border border-success'>$order[number]</a>";
+                }
+              } else {
+                echo "<h5>Brak zamówień</h5>";
+              }
+            echo "</div>";
+
+            echo <<< REJECTEDORDERS
+            <div class="col col-lg-3 d-flex flex-column p-4 m-2">
+              <h3 class="bg-danger bg-gradient p-4 my-4 rounded w-100">Odrzucone</h3>
+REJECTEDORDERS;
+              $orders = OrderController::getInstance()->getOrdersByStatus(3);
+              if($orders) {
+                foreach ($orders as $order) {
+                  echo "<a href='./order-details.php?number=$order[number]' class='text-reset text-decoration-none fs-5 fw-bolder w-100 p-4 my-2 rounded border border-danger'>$order[number]</a>";
+                }
+              } else {
+                echo "<h5>Brak zamówień</h5>";
+              }
+            echo "</div>";
+          }
+        }
+      ?>
+    </div>
+    <?php require_once('./components/footer.php'); ?>
+    <script src="../js/displayInfoMessage.js"></script>
   </body>
 </html>

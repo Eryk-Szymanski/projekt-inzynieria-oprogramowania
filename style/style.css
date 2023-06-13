@@ -1,0 +1,33 @@
+body {
+  background-color: rgb(33, 37, 41);
+}
+
+.screen-height {
+  min-height: 100vh;
+}
+
+.menu-buffer {
+  margin-top: 70px;
+}
+
+.image-small {
+  max-width: 75px;
+  max-height: 75px;
+}
+
+.image-medium {
+  max-width: 300px;
+  max-height: 300px;
+}
+
+.bg-footer {
+  background-color: #111111;
+  color: #999999;
+}
+
+.info-message {
+  position: absolute;
+  transition: 1s;
+  top: -300px;
+  right: 0px;
+}
