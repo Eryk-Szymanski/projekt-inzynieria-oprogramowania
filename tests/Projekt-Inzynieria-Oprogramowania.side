@@ -272,7 +272,7 @@
       "id": "f7eff416-db3d-4a48-932a-57fbcb8b6077",
       "comment": "",
       "command": "assertText",
-      "target": "css=.bg-primary",
+      "target": "xpath=//h3[contains(.,'Twoje zamówienia')]",
       "targets": [
         ["css=.bg-primary", "css:finder"],
         ["xpath=//body/div/div/h3", "xpath:position"],
@@ -315,7 +315,7 @@
         ["xpath=//input[@id='email']", "xpath:attributes"],
         ["xpath=//input", "xpath:position"]
       ],
-      "value": "pracownik@candyshop.com"
+      "value": "e@e.com"
     }, {
       "id": "7e03a2d1-cf74-4756-8a18-23b1dbd980f4",
       "comment": "",
@@ -328,7 +328,7 @@
         ["xpath=//input[@id='pass']", "xpath:attributes"],
         ["xpath=//input[2]", "xpath:position"]
       ],
-      "value": "pracownik"
+      "value": "e"
     }, {
       "id": "a2bc64be-47d5-49ba-9344-c21f92d0639d",
       "comment": "",
@@ -345,7 +345,7 @@
       "id": "734b1830-a5f5-4aa0-a03c-52f7fe8b3703",
       "comment": "",
       "command": "assertText",
-      "target": "css=.bg-primary",
+      "target": "xpath=//h3[contains(.,'Nowe zamówienia')]",
       "targets": [
         ["css=.bg-primary", "css:finder"],
         ["xpath=//body/div/div/h3", "xpath:position"],
@@ -408,7 +408,7 @@
       "id": "c5902135-3c0a-4332-a32c-6ec514978ea3",
       "comment": "",
       "command": "assertText",
-      "target": "css=.bg-primary",
+      "target": "xpath=//h3[contains(.,'Nowe zamówienia')]",
       "targets": [
         ["css=.bg-primary", "css:finder"],
         ["xpath=//body/div/div/h3", "xpath:position"],
@@ -451,7 +451,7 @@
         ["xpath=//input[@id='email']", "xpath:attributes"],
         ["xpath=//input", "xpath:position"]
       ],
-      "value": "pracownik@candyshop.com"
+      "value": "e@e.com"
     }, {
       "id": "d04b9d1c-384f-416e-a12f-e6d138d46f2f",
       "comment": "",
@@ -464,7 +464,7 @@
         ["xpath=//input[@id='pass']", "xpath:attributes"],
         ["xpath=//input[2]", "xpath:position"]
       ],
-      "value": "pracownik"
+      "value": "e"
     }, {
       "id": "ba6fd426-e65d-4db5-9812-df09c9a1379c",
       "comment": "",
