@@ -1,87 +1,144 @@
-<?php
+<?php 
   session_start();
+  require_once('../controllers/AccountController.php');
+  require_once('../controllers/OrderController.php');
+  require_once('../controllers/ProductController.php');
 ?>
 <!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>E-shop | Nowe Zamówienie</title>
+    <title>Candy Shop | Nowe Zamówienie</title>
+    <?php
+      require_once '../style/links.php';
+    ?>
   </head>
   <body>
-    <?php if (isset($_SESSION['success'])) : ?>
-      <?php 
-        echo <<< LOGOUT
-          <form action="../scripts/logout.php" method="post">
-              <button type="submit">Wyloguj</button>
+    <div class="container-fluid w-100 bg-dark screen-height d-flex justify-content-center text-light menu-buffer py-4">
+      <?php if (isset($_SESSION['user_id'])) : ?>
+        <?php require_once './components/menu.php'; ?>
+        <div class="col col-lg-6 p-4 mx-1 my-4 bg-warning bg-gradient rounded d-flex flex-column">
+          <h3 class="px-4 py-2">Nowe zamówienie</h3>
+
+          <form action="../scripts/handleForm.php" method="post" class="w-100">
+            <?php
+            
+              $user = AccountController::getInstance()->getById($_SESSION['user_id']);
+              $address = AccountController::getInstance()->getAddress($user['address_id']);
+              echo <<< USER_DATA
+                <div class="d-flex flex-column flex-lg-row">
+                  <div class="col col-lg-6 p-4 border-top border-white">
+                    <input type="number" value="$user[id]" name="user_id" hidden />
+                    <input type="number" value="$user[address_id]" name="address_id" hidden />
+                    <h3>Dane</h3>
+                    <h5>Imię: $user[name]</h5>
+                    <h5>Nazwisko: $user[surname]</h5>
+                    <h5>Email: $user[email]</h5>
+                    <h5>Telefon: $user[phone]</h5>
+                  </div>
+                  <div class="col col-lg-6 p-4 border-top border-white">
+                    <h3>Adres</h3>
+                    <h5>Kod pocztowy: $address->zipcode</h5>
+                    <h5>Miasto: $address->city</h5>
+                    <h5>Ulica: $address->street</h5>
+                    <h5>Budynek/mieszkanie: $address->apartment</h5>
+                  </div>
+                </div>
+USER_DATA;
+
+// Metoda płatności
+              $payment_methods = OrderController::getInstance()->getPaymentMethods();
+              echo "<div class='d-flex flex-column flex-lg-row'>";
+              echo "<div class='col col-lg-6 p-4 border-top border-white'>";
+              echo "<h5>Wybierz metodę płatności:</h5>";
+              foreach($payment_methods as $payment_method) {
+                echo <<<PAYMENT_METHOD
+                  <div class="form-check">
+                    <input class="form-check-input" type="radio" name="paymentMethod" id="paymentMethod" value="$payment_method[id]">
+                    <label class="form-check-label" for="paymentMethod">
+                      $payment_method[name]
+                    </label>
+                  </div>
+PAYMENT_METHOD;
+              }
+              echo "</div>";
+// Sposób dostawy  
+              $delivery_methods = OrderController::getInstance()->getDeliveryMethods();
+              echo "<div class='col col-lg-6 p-4 border-top border-white'>";
+              echo "<h5>Wybierz sposób dostawy:</h5>";
+              foreach($delivery_methods as $delivery_method) {
+                echo <<< DELIVERY_METHOD
+                  <div class="form-check">
+                    <input class="form-check-input" type="radio" name="deliveryMethod" id="deliveryMethod" price="$delivery_method[price]" days="$delivery_method[delivery_time]" value="$delivery_method[id]">
+                    <label class="form-check-label" for="deliveryMethod">
+                      $delivery_method[name]
+                      <br>
+                      Cena: $delivery_method[price] zł
+                      <br>
+                      Przewidywany czas dostawy: $delivery_method[delivery_time] dni
+                    </label>
+                  </div>
+DELIVERY_METHOD;
+              }
+            ?>
+            </div>
+            </div>
+            <input type="text" class="form-control my-2" placeholder="Dodaj komentarz" name="comments">
+
+            <div class="d-flex flex-column flex-lg-row w-100 justify-content-center">
+              <div class="col col-lg-4 btn-group m-2" role="group" aria-label="Basic radio toggle button group">
+                <input type="checkbox" class="btn-check" id="agreeTerms" name="agreeTerms" autocomplete="off" value="agree">
+                <label class="btn btn-outline-primary" for="agreeTerms">
+                  Zatwierdzam <a href="#" class="text-reset text-decoration-none fw-bolder">regulamin</a>
+                </label>
+              </div>
+
+              <button type="submit" class="col col-lg-6 btn btn-primary m-2" name="newOrder">Zamów</button>
+            </div>
           </form>
-LOGOUT;
-      ?>
-
-      <form action="../scripts/new-order.php" method="post">
-        <input type="text" placeholder="Imię" name="name">
-        <input type="text" placeholder="Nazwisko" name="surname">
-        <input type="text" placeholder="Kod pocztowy" name="zipcode">
-        
-        <?php
-          require_once '../scripts/connect.php';
-          $sql = "SELECT * FROM `cities`";
-          $result = $mysqli->query($sql);
-          $city = $result->fetch_assoc();
-        ?>
-
-        <select name="city_id" style="width: 100%;" data-select2-id="9" tabindex="-1" aria-hidden="true">
+          <br>
+          <h3 class='px-4'>Produkty:</h3>
+          <div class='m-2 d-flex flex-wrap flex-column flex-lg-row'>
           <?php
-            while ($city = $result->fetch_assoc()) {
-              echo "<option value=\"$city[id]\">$city[city]</option>";
+            if(isset($_SESSION['cart'])) {
+              $products = array();
+              foreach($_SESSION['cart'] as $key => $value) {
+                  $product = array('product_id' => $key, 'quantity' => $value);
+                  array_push($products, $product);
+              }
+              $test = json_encode($products);
+              $productsJson = json_decode($test);
+              $cart_value = 0;
+              $products = ProductController::getInstance()->getOrderProducts($productsJson);
+              foreach($products as $product) {
+                $cart_value += $product['final_price'];
+                $img = "";
+                if($product['image_path'])
+                  $img = "<img src='$product[image_path]' class='image-medium rounded mb-4' />";
+                echo <<< PRODUCT
+                  <div class='p-4 m-2 bg-dark bg-gradient border border-primary d-flex flex-column rounded'>
+                    $img
+                    <h5>Nazwa: <a href='./product-details.php?product_id=$product[id]' class='text-decoration-none'>$product[name]</a></h5>
+                    <h5>Ilość: $product[quantity]</h5>
+                    <h5>Cena za sztukę: $product[price] zł</h5>
+                    <h5>Cena końcowa: $product[final_price] zł</h5>
+                  </div>
+PRODUCT;
+              }
+              $_SESSION['cart_value'] = $cart_value;
+              echo "<p id='cart_value' hidden>$cart_value</p>";
             }
+            ?>
+          </div>
+          <?php if(isset($_SESSION['cart_value'])) 
+            echo "<h4 class='px-4' id='final_price'>Cena końcowa: $_SESSION[cart_value] zł</h4>";
+            echo "<h4 class='px-4' id='delivery_date'>Przewidywany termin dostawy: " . date("Y-n-j") . "</h4>";
           ?>
-        </select>
-        
-        <input type="text" placeholder="Ulica" name="street">
-        <input type="text" placeholder="Budynek/Mieszkanie" name="building">
-        <input type="text" placeholder="Dodaj komentarz" name="comment">
-
-        <input type="checkbox" id="agreeTerms" name="agreeTerms" value="agree">
-        <label for="agreeTerms">
-          Zatwierdzam <a href="#">regulamin</a>
-        </label>
-
-        <button type="submit">Zamów</button>
-      </form>
-
-      <table>
-        <tr>
-          <th>Produkt</th>
-          <th>Ilość</th>
-          <th>Cena za sztukę</th>
-          <th>Cena całkowita</th>
-        </tr>
-
-        <?php
-          if(isset($_SESSION['cart'])) {
-            require_once '../scripts/connect.php';
-            $cart_value = 0;
-            foreach($_SESSION['cart'] as $key => $value) {
-              $sql = "SELECT name, price FROM `products` WHERE id = $key";
-              $result = $mysqli->query($sql);
-              $product = $result->fetch_assoc();
-              $final_price = intval($value) * intval($product['price']);
-              $cart_value += $final_price;
-              echo <<< INFO
-              <tr>
-                <td>$product[name]</td>
-                <td>$value</td>
-                <td>$product[price] zł</td>
-                <td>$final_price zł</td>
-              </tr>
-INFO;
-            }
-            $_SESSION['cart_value'] = $cart_value;
-            echo "<h7>Cena końcowa: $_SESSION[cart_value] zł</h7>";
-          }
-        ?>
-      </table>
-    <?php endif ?>
+        </div>
+      <?php endif ?>
+    </div>
+    <?php require_once('./components/footer.php'); ?>
+    <script src="../js/deliveryMethodCheckbox.js"></script>
   </body>
 </html>
