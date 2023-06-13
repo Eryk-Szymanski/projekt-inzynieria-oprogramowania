@@ -30,16 +30,16 @@
             return $this->service->logout();
         }
         
-        public function register($data) {
-            return $this->service->register($data);
+        public function createNew($data) {
+            return $this->service->createNew($data);
         }
 
-        public function getUser(int $user_id) {
-            return $this->service->getUser($user_id);  
+        public function getById(int $user_id) {
+            return $this->service->getById($user_id);  
         }
 
-        public function getUsers() {
-            return $this->service->getUsers();
+        public function getAll() {
+            return $this->service->getAll();
         }
 
         public function getAddress(int $address_id) {

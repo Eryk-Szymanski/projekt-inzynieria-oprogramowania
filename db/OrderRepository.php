@@ -1,6 +1,9 @@
 <?php declare(strict_types=1);
 
-    class OrderRepository {
+    use model\interfaces\IRepository;
+    require_once '../model/interfaces/IRepository.php';
+
+    class OrderRepository implements IRepository {
 
         private mysqli $connection;
 
@@ -9,7 +12,7 @@
             $this->connection = $mysqli;
         }
 
-        public function newOrder($order) {
+        public function createNew($order) {
 
             $error = "";
             try {
@@ -52,7 +55,7 @@
             return ["error" => $error];
         }
 
-        public function getOrder(string $orderNumber) {
+        public function getById($orderNumber) {
 
             $error = "";
             try {
@@ -144,6 +147,8 @@
             }
             return ["error" => $error];
         }
+
+        public function getAll() {}
 
         public function getUserOrders(int $user_id) {
 

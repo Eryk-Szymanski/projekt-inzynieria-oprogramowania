@@ -13,7 +13,7 @@
             $this->repository = new OrderRepository();
         }
 
-        public function newOrder($order, $cart, $cart_value) {
+        public function createNew($order, $cart, $cart_value) {
 
             $error = 0;
             foreach ($order as $key => $value) {
@@ -39,7 +39,7 @@
             $order['products'] = json_encode($products);
             $order['cart_value'] = $cart_value;
 
-            $result = $this->repository->newOrder($order);
+            $result = $this->repository->createNew($order);
             if(isset($result['success']))
                 return ["success" => "Prawidłowo utworzono zamówienie"];
 
@@ -79,9 +79,9 @@
             return ["error" => $result['error']];
         }
 
-        public function getOrder(string $orderNumber) {
+        public function getById(string $orderNumber) {
 
-            $result = $this->repository->getOrder($orderNumber);
+            $result = $this->repository->getById($orderNumber);
             if(isset($result['success'])) 
                 return $result['order'];
             

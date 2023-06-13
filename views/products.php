@@ -23,7 +23,7 @@
         <h3 class="mt-4 pt-4 text-center">Wszystkie produkty</h3>
         <?php if (isset($_SESSION['user_id'])) 
         
-          $products = ProductController::getInstance()->getProducts();
+          $products = ProductController::getInstance()->getAll();
           
           if(count($products)) {
             echo "<div class='d-flex flex-wrap flex-column flex-lg-row justify-content-center'>";

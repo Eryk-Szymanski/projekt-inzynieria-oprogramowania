@@ -21,8 +21,8 @@
             return self::$instance;
         }
 
-        public function newProduct($data) {
-            return $this->service->newProduct($data);
+        public function createNew($data) {
+            return $this->service->createNew($data);
         }
 
         public function updateProduct($data) {
@@ -45,8 +45,8 @@
             return $this->service->getProductDetails($product_id);
         }
 
-        public function getProducts() {
-            return $this->service->getProducts();
+        public function getAll() {
+            return $this->service->getAll();
         }
 
     }

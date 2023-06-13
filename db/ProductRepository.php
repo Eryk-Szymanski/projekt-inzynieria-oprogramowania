@@ -1,6 +1,9 @@
 <?php declare(strict_types=1);
 
-    class ProductRepository {
+    use model\interfaces\IRepository;
+    require_once '../model/interfaces/IRepository.php';
+
+    class ProductRepository implements IRepository {
 
         private mysqli $connection;
 
@@ -9,7 +12,7 @@
             $this->connection = $mysqli;
         }
 
-        public function newProduct($product) {
+        public function createNew($product) {
 
             $error = "";
             try {
@@ -78,7 +81,7 @@
             return ["error" => $error];
         }
 
-        public function getProducts() {
+        public function getAll() {
 
             $error = "";
             $products = [];
@@ -99,7 +102,7 @@
             return ["error" => $error];
         }
 
-        public function getProduct(int $product_id) {
+        public function getById($product_id) {
 
             $error = "";
             try {

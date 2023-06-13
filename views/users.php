@@ -26,7 +26,7 @@
                     <th>Rola</th>
                 </tr>
 USERS;
-            $users = AccountController::getInstance()->getUsers();
+            $users = AccountController::getInstance()->getAll();
             foreach ($users as $user) {
                 echo <<< USERSADMIN
                 <tr>

@@ -36,7 +36,7 @@
     if (isset($_POST['register'])){
         unset($_POST['register']);
         session_start();
-        $result = AccountController::getInstance()->register($_POST);
+        $result = AccountController::getInstance()->createNew($_POST);
         if(isset($result['success']))
             $_SESSION['success'] = $result['success'];
         else
@@ -76,7 +76,7 @@
     if (isset($_POST['newOrder'])){
         unset($_POST['newOrder']);
         session_start();
-        $result = OrderController::getInstance()->newOrder($_POST, $_SESSION['cart'], $_SESSION['cart_value']);
+        $result = OrderController::getInstance()->createNew($_POST, $_SESSION['cart'], $_SESSION['cart_value']);
         if(isset($result['success'])) {
             $_SESSION['success'] = $result['success'];
             unset($_SESSION['cart']);
@@ -94,7 +94,7 @@
         session_start();
         require_once('./uploadFile.php');
         $_POST['image_path'] = uploadFile($_FILES, "");
-        $result = ProductController::getInstance()->newProduct($_POST);
+        $result = ProductController::getInstance()->createNew($_POST);
         if(isset($result['success'])) {
             $_SESSION['success'] = $result['success'];
             header('location: ../views/products.php');

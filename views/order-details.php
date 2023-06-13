@@ -19,7 +19,7 @@
 
             require_once './components/menu.php';
 
-            $order = OrderController::getInstance()->getOrder($_GET['number']);
+            $order = OrderController::getInstance()->getById($_GET['number']);
             if ($order) {
               echo <<< INFO
                 <h3 class="p-4 m-0 bg-primary bg-gradient rounded">Numer: $order[number]</h3>

@@ -13,7 +13,7 @@
             $this->repository = new ProductRepository();
         }
 
-        public function newProduct($product) {
+        public function createNew($product) {
             
             $error = 0;
             foreach ($_POST as $key => $value) {
@@ -24,7 +24,7 @@
             if($error == 1) 
                 echo "<script>history.back();</script>";
 
-            $result = $this->repository->newProduct($product);
+            $result = $this->repository->createNew($product);
             if(isset($result['success']))
                 return ["success" => "Prawidłowo zarejestrowano użytkownika"];
 
@@ -62,9 +62,9 @@
             return ["error" => $result['error']];
         }
 
-        public function getProducts() {
+        public function getAll() {
 
-            $result = $this->repository->getProducts();
+            $result = $this->repository->getAll();
             if(isset($result['success'])) 
                 return $result['products'];
             
@@ -85,7 +85,7 @@
 
             $products = [];
             foreach($productsJson as $productJson) {
-                $result = $this->repository->getProduct($productJson->product_id);
+                $result = $this->repository->getById($productJson->product_id);
                 if(isset($result['success'])) {
                     $result['product']['quantity'] = $productJson->quantity;
                     if(isset($result['product']['price'])) 

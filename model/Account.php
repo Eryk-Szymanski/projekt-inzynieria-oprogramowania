@@ -1,6 +1,6 @@
 <?php
 
-    class ClientAccount implements IAccount {
+    class ClientAccount {
         public $id;
         public $name;
         public $surname;

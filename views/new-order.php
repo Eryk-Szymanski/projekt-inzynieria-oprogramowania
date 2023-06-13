@@ -24,7 +24,7 @@
           <form action="../scripts/handleForm.php" method="post" class="w-100">
             <?php
             
-              $user = AccountController::getInstance()->getUser($_SESSION['user_id']);
+              $user = AccountController::getInstance()->getById($_SESSION['user_id']);
               $address = AccountController::getInstance()->getAddress($user['address_id']);
               echo <<< USER_DATA
                 <div class="d-flex flex-column flex-lg-row">

@@ -1,6 +1,9 @@
 <?php declare(strict_types=1);
 
-    class AccountRepository {
+    use model\interfaces\IRepository;
+    require_once '../model/interfaces/IRepository.php';
+
+    class AccountRepository implements IRepository {
 
         private mysqli $connection;
 
@@ -32,7 +35,7 @@
             return ["error" => $error, "user" => null];
         }
 
-        public function createUser($user) {
+        public function createNew($user) {
 
             $error = "";
             try {
@@ -59,7 +62,7 @@
             return ["error" => $error];
         }
 
-        public function getUser($user_id) {
+        public function getById($user_id) {
 
             $error = "";
             try {
@@ -102,7 +105,7 @@
             return ["error" => $error];
         }
 
-        public function getUsers() {
+        public function getAll() {
 
             $error = "";
             try {

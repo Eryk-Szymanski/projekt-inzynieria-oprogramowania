@@ -35,7 +35,7 @@
             return ["error" => $result['error']];
         }
 
-        public function register($user) {
+        public function createNew($user) {
 
             $error = 0;
             foreach ($user as $key => $value) {
@@ -51,7 +51,7 @@
 
             $user['hash'] = password_hash($user['pass1'], PASSWORD_ARGON2ID); 
             
-            $result = $this->repository->createUser($user);
+            $result = $this->repository->createNew($user);
             if(isset($result['success']))
                 return ["success" => "Prawidłowo zarejestrowano użytkownika"];
 
@@ -84,12 +84,12 @@
             return ["error" => $error];
         }
 
-        public function getUser(int $user_id) {
+        public function getById(int $user_id) {
 
             if (empty($user_id))
                 echo "<script>history.back();</script>";
 
-            $result = $this->repository->getUser($user_id);
+            $result = $this->repository->getById($user_id);
             if(isset($result['success']))
                 return $result['user'];
 
@@ -108,9 +108,9 @@
             return null;
         }
 
-        public function getUsers() {
+        public function getAll() {
 
-            $result = $this->repository->getUsers();
+            $result = $this->repository->getAll();
             if(isset($result['success'])) 
                 return $result['users'];
             
