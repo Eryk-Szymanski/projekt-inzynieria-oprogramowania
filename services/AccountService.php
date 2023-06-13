@@ -1,7 +1,9 @@
 <?php declare(strict_types=1);
 
     use model\interfaces\IService;
+    use model\Address;
     require_once '../model/interfaces/IService.php';
+    require_once '../model/Address.php';
 
     include '../db/AccountRepository.php';
 
@@ -84,7 +86,7 @@
             return ["error" => $error];
         }
 
-        public function getById(int $user_id) {
+        public function getById($user_id) {
 
             if (empty($user_id))
                 echo "<script>history.back();</script>";
@@ -103,7 +105,13 @@
 
             $result = $this->repository->getAddress($address_id);
             if(isset($result['success'])) 
-                return $result['address'];
+                return new Address(
+                    $result['address']['id'], 
+                    $result['address']['zipcode'], 
+                    $result['address']['city'], 
+                    $result['address']['street'], 
+                    $result['address']['apartment']
+                );
             
             return null;
         }

@@ -13,7 +13,7 @@
             $this->repository = new OrderRepository();
         }
 
-        public function createNew($order, $cart, $cart_value) {
+        public function createNew($order) {
 
             $error = 0;
             foreach ($order as $key => $value) {
@@ -31,13 +31,6 @@
                 echo "<script>history.back();</script>";
             
             $order['number'] = strval(date("YmdHms"));
-            $products = array();
-            foreach($cart as $key => $value) {
-                $product = array('product_id' => $key, 'quantity' => $value);
-                array_push($products, $product);
-            }
-            $order['products'] = json_encode($products);
-            $order['cart_value'] = $cart_value;
 
             $result = $this->repository->createNew($order);
             if(isset($result['success']))
@@ -79,7 +72,7 @@
             return ["error" => $result['error']];
         }
 
-        public function getById(string $orderNumber) {
+        public function getById($orderNumber) {
 
             $result = $this->repository->getById($orderNumber);
             if(isset($result['success'])) 
@@ -87,6 +80,8 @@
             
             return null;
         }
+
+        public function getAll() {}
 
         public function getPaymentMethods() {
 

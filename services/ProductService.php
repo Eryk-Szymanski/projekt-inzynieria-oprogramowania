@@ -62,6 +62,8 @@
             return ["error" => $result['error']];
         }
 
+        public function getById($id) {}
+
         public function getAll() {
 
             $result = $this->repository->getAll();

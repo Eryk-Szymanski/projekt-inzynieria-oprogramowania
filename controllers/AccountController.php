@@ -11,7 +11,6 @@
         private static AccountController $instance;
 
         private function __construct() {
-            
             $this->service = new AccountService();
         }
 
@@ -34,7 +33,7 @@
             return $this->service->createNew($data);
         }
 
-        public function getById(int $user_id) {
+        public function getById($user_id) {
             return $this->service->getById($user_id);  
         }
 

@@ -49,6 +49,10 @@
             return $this->service->getAll();
         }
 
+        public function getById($id) {
+            return $this->service->getById();
+        }
+
     }
 
 ?>

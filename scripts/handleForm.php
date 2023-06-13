@@ -76,7 +76,14 @@
     if (isset($_POST['newOrder'])){
         unset($_POST['newOrder']);
         session_start();
-        $result = OrderController::getInstance()->createNew($_POST, $_SESSION['cart'], $_SESSION['cart_value']);
+        $products = array();
+        foreach($_SESSION['cart'] as $key => $value) {
+            $product = array('product_id' => $key, 'quantity' => $value);
+            array_push($products, $product);
+        }
+        $_POST['products'] = json_encode($products);
+        $_POST['cart_value'] = $_SESSION['cart_value'];
+        $result = OrderController::getInstance()->createNew($_POST);
         if(isset($result['success'])) {
             $_SESSION['success'] = $result['success'];
             unset($_SESSION['cart']);

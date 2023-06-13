@@ -88,7 +88,7 @@
 
             $error = "";
             try {
-                $sql = "SELECT zipcode, city, street, apartment FROM `addresses` WHERE id = $address_id";
+                $sql = "SELECT * FROM `addresses` WHERE id = $address_id";
                 $result = $this->connection->query($sql);
                 $address = $result->fetch_assoc();
 

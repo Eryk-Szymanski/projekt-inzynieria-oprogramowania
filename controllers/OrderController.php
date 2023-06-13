@@ -25,8 +25,8 @@
             return $this->service->changeOrderStatus($data);  
         }
 
-        public function createNew($data, $cart, $cart_value) {
-            return $this->service->createNew($data, $cart, $cart_value);    
+        public function createNew($data) {
+            return $this->service->createNew($data);    
         }
 
         public function getDeliveryMethods() {
@@ -37,8 +37,12 @@
             return $this->service->getPaymentMethods();
         }
 
-        public function getById(string $order_number) {
+        public function getById($order_number) {
             return $this->service->getById($order_number); 
+        }
+
+        public function getAll() {
+            return $this->service->getAll(); 
         }
 
         public function getOrdersByStatus(int $status_id) {

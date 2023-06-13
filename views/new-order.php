@@ -1,4 +1,4 @@
-<?php
+<?php 
   session_start();
   require_once('../controllers/AccountController.php');
   require_once('../controllers/OrderController.php');
@@ -39,10 +39,10 @@
                   </div>
                   <div class="col col-lg-6 p-4 border-top border-white">
                     <h3>Adres</h3>
-                    <h5>Kod pocztowy: $address[zipcode]</h5>
-                    <h5>Miasto: $address[city]</h5>
-                    <h5>Ulica: $address[street]</h5>
-                    <h5>Budynek/mieszkanie: $address[apartment]</h5>
+                    <h5>Kod pocztowy: $address->zipcode</h5>
+                    <h5>Miasto: $address->city</h5>
+                    <h5>Ulica: $address->street</h5>
+                    <h5>Budynek/mieszkanie: $address->apartment</h5>
                   </div>
                 </div>
 USER_DATA;
